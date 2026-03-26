@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 error_reporting(0);
 include('database.php');
@@ -28,14 +28,14 @@ $hasToken = false;
         <span class="logo_name">Expenditure</span>
     </div>
     <ul class="nav-links">
-        <li><a href="#" class="active"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a></li>
-        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Expenses</span></a></li>
-        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Income</span></a></li>
-        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Manage List</span></a></li>
-        <li><a href="lending.php"><i class='bx bx-money'></i><span class="links_name">lending</span></a></li>
-        <li><a href="manage-lending.php"><i class='bx bx-coin-stack'></i><span class="links_name">Manage lending</span></a></li>
-        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Analytics</span></a></li>
-        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Report</span></a></li>
+        <li><a href="#" class="active"><i class='bx bx-grid-alt'></i><span class="links_name">Tong quan</span></a></li>
+        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Chi tieu</span></a></li>
+        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Thu nhap</span></a></li>
+        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Quan ly giao dich</span></a></li>
+        <li><a href="cho vay.php"><i class='bx bx-money'></i><span class="links_name">cho vay</span></a></li>
+        <li><a href="manage-cho vay.php"><i class='bx bx-coin-stack'></i><span class="links_name">Quan ly cho vay</span></a></li>
+        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Phan tich</span></a></li>
+        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Bao cao</span></a></li>
         <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name">Setting</span></a></li>
         <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
     </ul>
@@ -45,10 +45,10 @@ $hasToken = false;
     <nav>
         <div class="sidebar-button">
             <i class='bx bx-menu sidebarBtn'></i>
-            <span class="dashboard">Dashboard</span>
+            <span class="dashboard">Tong quan</span>
         </div>
         <div class="search-box">
-            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Search...">
+            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Tim kiem...">
             <i class='bx bx-search'></i>
         </div>
         <div class="profile-details">
@@ -66,7 +66,7 @@ $hasToken = false;
         <div class="overview-boxes">
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Today Expense</div>
+                    <div class="box-topic">Today Chi tieu</div>
                     <div class="number" id="today-expense">0</div>
                     <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from Today</span></div>
                 </div>
@@ -75,7 +75,7 @@ $hasToken = false;
 
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Yesterday Expense</div>
+                    <div class="box-topic">Yesterday Chi tieu</div>
                     <div class="number" id="yesterday-expense">0</div>
                     <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from yesterday</span></div>
                 </div>
@@ -84,7 +84,7 @@ $hasToken = false;
 
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Last 30 day Expense</div>
+                    <div class="box-topic">Last 30 day Chi tieu</div>
                     <div class="number" id="monthly-expense">0</div>
                     <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from Last 30 day</span></div>
                 </div>
@@ -93,7 +93,7 @@ $hasToken = false;
 
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Total Expense</div>
+                    <div class="box-topic">Total Chi tieu</div>
                     <div class="number" id="total-expense">0</div>
                     <div class="indicator"><i class='bx bx-up-arrow-alt up'></i><span class="text">Up from Year</span></div>
                 </div>
@@ -102,7 +102,7 @@ $hasToken = false;
         </div>
 
         <div class="card">
-            <div class="card-header"><h5 class="card-title">Expense Chart</h5></div>
+            <div class="card-header"><h5 class="card-title">Chi tieu Chart</h5></div>
             <div class="card-body"><canvas id="myChart"></canvas></div>
         </div>
 
@@ -123,7 +123,7 @@ $hasToken = false;
     </div>
 </section>
 
-<button id="add-button" title="Add Expense"><i class="fas fa-plus"></i></button>
+<button id="add-button" title="Add Chi tieu"><i class="fas fa-plus"></i></button>
 
 <script>
 var chart;
@@ -139,7 +139,7 @@ function checkAuthAndRedirect() {
     return true;
 }
 
-function loadDashboardData() {
+function loadTong quanData() {
     if (!checkAuthAndRedirect()) return;
     
     $.ajax({
@@ -159,7 +159,7 @@ function loadDashboardData() {
                 updateChart(data.chart.labels, data.chart.data);
                 updateCategoryTable(data.categories);
             } else {
-                console.error('Dashboard error:', response.message);
+                console.error('Tong quan error:', response.message);
                 if (response.message && response.message.includes('Unauthorized')) {
                     localStorage.removeItem('access_token');
                     window.location.href = 'index.php';
@@ -167,7 +167,7 @@ function loadDashboardData() {
             }
         },
         error: function(xhr) {
-            console.error('Dashboard request failed');
+            console.error('Tong quan request failed');
             if (xhr.status === 401) {
                 localStorage.removeItem('access_token');
                 window.location.href = 'index.php';
@@ -190,7 +190,7 @@ function updateChart(labels, data) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Expenses',
+                label: 'Chi tieu',
                 data: data,
                 backgroundColor: 'rgba(224, 82, 96, 0.5)',
                 borderColor: '#e05260',
@@ -226,9 +226,9 @@ function updateCategoryTable(categories) {
 }
 
 $(document).ready(function() {
-    loadDashboardData();
+    loadTong quanData();
     
-    setInterval(loadDashboardData, 30000);
+    setInterval(loadTong quanData, 30000);
     
     $('#search-input').on('keyup', function() {
         var value = $(this).val().toLowerCase();
@@ -399,3 +399,4 @@ addButton.addEventListener('click', () => {
 </style>
 </body>
 </html>
+

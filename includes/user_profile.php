@@ -1,4 +1,4 @@
-
+﻿
 <?php
 session_start();
 error_reporting(0);
@@ -13,7 +13,7 @@ if (empty($_SESSION['detsuid'])) {
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
-    <!--<title> Responsiive Admin Dashboard | CodingLab </title>-->
+    <!--<title> Responsiive Admin Tong quan | CodingLab </title>-->
     <link rel="stylesheet" href="css/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -41,50 +41,50 @@ if (empty($_SESSION['detsuid'])) {
         <li>
           <a href="home.php">
             <i class='bx bx-grid-alt' ></i>
-            <span class="links_name">Dashboard</span>
+            <span class="links_name">Tong quan</span>
           </a>
         </li>
         <li>
           <a href="add-expenses.php">
             <i class='bx bx-box' ></i>
-            <span class="links_name">Expenses</span>
+            <span class="links_name">Chi tieu</span>
           </a>
         </li>
        <li>
           <a href="add-income.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Income</span>
+            <span class="links_name">Thu nhap</span>
           </a>
         </li>
         <li>
           <a href="manage-transaction.php">
             <i class='bx bx-list-ul'></i>
-            <span class="links_name">Manage List</span>
+            <span class="links_name">Quan ly giao dich</span>
           </a>
         </li>
         
         <li>
-          <a href="lending.php">
+          <a href="cho vay.php">
           <i class='bx bx-money'></i>
-            <span class="links_name">lending</span>
+            <span class="links_name">cho vay</span>
           </a>
         </li>
         <li>
-        <a href="manage-lending.php" >
+        <a href="manage-cho vay.php" >
         <i class='bx bx-coin-stack'></i>
-            <span class="links_name">Manage lending</span>
+            <span class="links_name">Quan ly cho vay</span>
           </a>
         </li>
         <li>
           <a href="analytics.php">
             <i class='bx bx-pie-chart-alt-2' ></i>
-            <span class="links_name">Analytics</span>
+            <span class="links_name">Phan tich</span>
           </a>
         </li>
         <li>
           <a href="report.php">
           <i class="bx bx-file"></i>
-            <span class="links_name">Report</span>
+            <span class="links_name">Bao cao</span>
           </a>
         </li>
        <li>
@@ -188,7 +188,7 @@ if (mysqli_num_rows($result) > 0) {
     <h4 class="text-center"><?php echo $name; ?></h4>
   </div>
 					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+						<a class="nav-link active" id="tai khoan-tab" data-toggle="pill" href="#tai khoan" role="tab" aria-controls="tai khoan" aria-selected="true">
 							<i class="fa fa-home text-center mr-1"></i> 
 							Account
 						</a>
@@ -211,7 +211,7 @@ if (mysqli_num_rows($result) > 0) {
 					</div>
 				</div>
 				<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
-					<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+					<div class="tab-pane fade show active" id="tai khoan" role="tabpanel" aria-labelledby="tai khoan-tab">
 						<h3 class="mb-4">Account Settings</h3>
 						<form method="POST" action="update_user.php">
 						<div class="row">

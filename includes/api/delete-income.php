@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 header('Content-Type: application/json');
 include_once('../database.php');
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $incomeId = $_POST['id'] ?? 0;
 
     if (empty($incomeId)) {
-        echo json_encode(['status' => 'error', 'message' => 'Income ID is required']);
+        echo json_encode(['status' => 'error', 'message' => 'Thu nhap ID is required']);
         exit;
     }
 
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ii", $incomeId, $userid);
 
     if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Income deleted successfully']);
+        echo json_encode(['status' => 'success', 'message' => 'Thu nhap deleted successfully']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
     }
@@ -31,3 +31,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>
+

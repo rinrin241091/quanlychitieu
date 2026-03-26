@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 error_reporting(0);
 include('database.php');
@@ -8,7 +8,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Income</title>
+    <title>Manage Thu nhap</title>
     <link rel="stylesheet" href="css/style.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -31,15 +31,15 @@ $sessionValid = !empty($_SESSION['detsuid']);
 <div class="sidebar">
     <div class="logo-details"><i class='bx bx-album'></i><span class="logo_name">Expenditure</span></div>
     <ul class="nav-links">
-        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a></li>
-        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Expenses</span></a></li>
-        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Income</span></a></li>
-        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Manage List</span></a></li>
-        <li><a href="manage-income.php" class="active"><i class='bx bx-coin-stack'></i><span class="links_name">Manage Income</span></a></li>
-        <li><a href="lending.php"><i class='bx bx-money'></i><span class="links_name">Lending</span></a></li>
-        <li><a href="manage-lending.php"><i class='bx bx-coin-stack'></i><span class="links_name">Manage Lending</span></a></li>
-        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Analytics</span></a></li>
-        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Report</span></a></li>
+        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Tong quan</span></a></li>
+        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Chi tieu</span></a></li>
+        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Thu nhap</span></a></li>
+        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Quan ly giao dich</span></a></li>
+        <li><a href="manage-income.php" class="active"><i class='bx bx-coin-stack'></i><span class="links_name">Manage Thu nhap</span></a></li>
+        <li><a href="cho vay.php"><i class='bx bx-money'></i><span class="links_name">Cho vay</span></a></li>
+        <li><a href="manage-cho vay.php"><i class='bx bx-coin-stack'></i><span class="links_name">Quan ly cho vay</span></a></li>
+        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Phan tich</span></a></li>
+        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Bao cao</span></a></li>
         <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name">Setting</span></a></li>
         <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
     </ul>
@@ -49,7 +49,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
     <nav>
         <div class="sidebar-button"><i class='bx bx-menu sidebarBtn'></i><span class="dashboard">Expenditure</span></div>
         <div class="search-box">
-            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Search...">
+            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Tim kiem...">
             <i class='bx bx-search'></i>
         </div>
         <div class="profile-details">
@@ -72,7 +72,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
                             <div class="card">
                                 <div class="card-header">
                                     <div class="row align-items-center">
-                                        <div class="col-md-4"><h4 class="card-title mb-0">Manage Income</h4></div>
+                                        <div class="col-md-4"><h4 class="card-title mb-0">Manage Thu nhap</h4></div>
                                         <div class="col-md-8 text-right">
                                             <label class="mb-0">Show
                                                 <select class="form-control-sm mx-1" id="select-entries">
@@ -91,7 +91,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
                                     <div class="row mb-3">
                                         <div class="col-md-12">
                                             <div class="summary-box">
-                                                <h5>Total Income: Rs. <span id="total-income">0.00</span></h5>
+                                                <h5>Total Thu nhap: Rs. <span id="total-income">0.00</span></h5>
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +142,7 @@ function checkAuth() {
     return true;
 }
 
-function loadIncome() {
+function loadThu nhap() {
     if (!checkAuth()) return;
 
     $.ajax({
@@ -152,7 +152,7 @@ function loadIncome() {
         dataType: 'json',
         success: function(response) {
             if (response.status === 'success') {
-                renderIncome(response.data.transactions, response.data.pagination);
+                renderThu nhap(response.data.transactions, response.data.pagination);
             } else {
                 $('#income-tbody').html('<tr><td colspan="6" class="text-center text-danger">' + response.message + '</td></tr>');
             }
@@ -168,7 +168,7 @@ function loadIncome() {
     });
 }
 
-function renderIncome(income, pagination) {
+function renderThu nhap(income, pagination) {
     if (income.length === 0) {
         $('#income-tbody').html('<tr><td colspan="6" class="text-center">No income records found</td></tr>');
         $('#pagination').html('');
@@ -216,12 +216,12 @@ $(document).ready(function() {
         $('#user-name').text(user.name || 'User');
     }
 
-    loadIncome();
+    loadThu nhap();
 
     $('#select-entries').on('change', function() {
         currentLimit = parseInt($(this).val());
         currentPage = 1;
-        loadIncome();
+        loadThu nhap();
     });
 
     $(document).on('click', '.page-link', function(e) {
@@ -229,7 +229,7 @@ $(document).ready(function() {
         var page = parseInt($(this).data('page'));
         if (page > 0) {
             currentPage = page;
-            loadIncome();
+            loadThu nhap();
         }
     });
 
@@ -244,7 +244,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response.status === 'success') {
                         alert(response.message);
-                        loadIncome();
+                        loadThu nhap();
                     } else {
                         alert(response.message);
                     }
@@ -281,3 +281,4 @@ toggleButton.addEventListener('click', () => { profileOptions.classList.toggle('
 </script>
 </body>
 </html>
+

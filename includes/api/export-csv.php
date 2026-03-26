@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include_once('../database.php');
 include_once('../auth_helper.php');
 
@@ -17,12 +17,12 @@ $endDate = $_GET['end_date'] ?? null;
 $data = [];
 
 if ($type === 'all' || $type === 'expense') {
-    $sql = "SELECT ExpenseDate as date, Description as particulars, ExpenseCost as expense, 0 as income, category, 'no' as is_lending FROM tblexpense WHERE UserId = ?";
+    $sql = "SELECT Chi tieuDate as date, Description as particulars, Chi tieuCost as expense, 0 as income, category, 'no' as is_cho vay FROM tblexpense WHERE UserId = ?";
     $types = "i";
     $params = [$userid];
     
     if ($startDate && $endDate) {
-        $sql .= " AND ExpenseDate BETWEEN ? AND ?";
+        $sql .= " AND Chi tieuDate BETWEEN ? AND ?";
         $types .= "ss";
         $params[] = $startDate;
         $params[] = $endDate;
@@ -40,12 +40,12 @@ if ($type === 'all' || $type === 'expense') {
 }
 
 if ($type === 'all' || $type === 'income') {
-    $sql = "SELECT IncomeDate as date, Description as particulars, 0 as expense, IncomeAmount as income, category, 'no' as is_lending FROM tblincome WHERE UserId = ?";
+    $sql = "SELECT Thu nhapDate as date, Description as particulars, 0 as expense, Thu nhapAmount as income, category, 'no' as is_cho vay FROM tblincome WHERE UserId = ?";
     $types = "i";
     $params = [$userid];
     
     if ($startDate && $endDate) {
-        $sql .= " AND IncomeDate BETWEEN ? AND ?";
+        $sql .= " AND Thu nhapDate BETWEEN ? AND ?";
         $types .= "ss";
         $params[] = $startDate;
         $params[] = $endDate;
@@ -62,17 +62,17 @@ if ($type === 'all' || $type === 'income') {
     $stmt->close();
 }
 
-if ($type === 'all' || $type === 'lending') {
-    $sql = "SELECT date_of_lending as date, name as particulars, 
+if ($type === 'all' || $type === 'cho vay') {
+    $sql = "SELECT date_of_cho vay as date, name as particulars, 
             CASE WHEN status = 'pending' THEN amount ELSE 0 END as expense,
             CASE WHEN status = 'received' THEN amount ELSE 0 END as income,
-            'Lending' as category, 'yes' as is_lending 
-            FROM lending WHERE UserId = ?";
+            'Cho vay' as category, 'yes' as is_cho vay 
+            FROM cho vay WHERE UserId = ?";
     $types = "i";
     $params = [$userid];
     
     if ($startDate && $endDate) {
-        $sql .= " AND date_of_lending BETWEEN ? AND ?";
+        $sql .= " AND date_of_cho vay BETWEEN ? AND ?";
         $types .= "ss";
         $params[] = $startDate;
         $params[] = $endDate;
@@ -100,7 +100,7 @@ header('Expires: 0');
 
 $output = fopen('php://output', 'w');
 
-fputcsv($output, ['Date', 'Particulars', 'expense', 'income', 'category', 'is_lending']);
+fputcsv($output, ['Date', 'Particulars', 'expense', 'income', 'category', 'is_cho vay']);
 
 foreach ($data as $row) {
     fputcsv($output, [
@@ -109,10 +109,11 @@ foreach ($data as $row) {
         $row['expense'],
         $row['income'],
         $row['category'],
-        $row['is_lending']
+        $row['is_cho vay']
     ]);
 }
 
 fclose($output);
 exit;
 ?>
+

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -33,5 +33,6 @@
 <script
       src="https://kit.fontawesome.com/64d58efce2.js"
       crossorigin="anonymous"></script>
+
 
 

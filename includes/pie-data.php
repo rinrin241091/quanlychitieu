@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 session_start();
 include_once('database.php');
 $userid = $_SESSION['detsuid'];
 
 // Retrieve total expense of each category
-$query = "SELECT category, SUM(ExpenseCost) AS total_expense FROM tblexpense WHERE UserId = ? GROUP BY category";
+$query = "SELECT category, SUM(Chi tieuCost) AS total_expense FROM tblexpense WHERE UserId = ? GROUP BY category";
 $stmt = $db->prepare($query);
 $stmt->bind_param("i", $userid);
 $stmt->execute();
@@ -34,3 +34,4 @@ foreach ($data as &$item) {
 // Convert the array to JSON format and output it
 echo json_encode($data);
 ?>
+

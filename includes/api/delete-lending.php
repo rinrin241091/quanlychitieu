@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -19,27 +19,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($id <= 0) {
         http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Invalid lending ID']);
+        echo json_encode(['status' => 'error', 'message' => 'Invalid cho vay ID']);
         exit;
     }
     
-    $checkQuery = mysqli_query($db, "SELECT id FROM lending WHERE id='$id' AND UserId='$userid'");
+    $checkQuery = mysqli_query($db, "SELECT id FROM cho vay WHERE id='$id' AND UserId='$userid'");
     if (mysqli_num_rows($checkQuery) === 0) {
         http_response_code(404);
-        echo json_encode(['status' => 'error', 'message' => 'Lending record not found']);
+        echo json_encode(['status' => 'error', 'message' => 'Cho vay record not found']);
         exit;
     }
     
-    $deleteQuery = mysqli_query($db, "DELETE FROM lending WHERE id='$id' AND UserId='$userid'");
+    $deleteQuery = mysqli_query($db, "DELETE FROM cho vay WHERE id='$id' AND UserId='$userid'");
     
     if ($deleteQuery) {
-        echo json_encode(['status' => 'success', 'message' => 'Lending record deleted successfully']);
+        echo json_encode(['status' => 'success', 'message' => 'Cho vay record deleted successfully']);
     } else {
         http_response_code(500);
-        echo json_encode(['status' => 'error', 'message' => 'Failed to delete lending record']);
+        echo json_encode(['status' => 'error', 'message' => 'Failed to delete cho vay record']);
     }
 } else {
     http_response_code(405);
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>
+

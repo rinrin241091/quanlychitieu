@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -16,21 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userid = requireAuthentication();
 
     $name = $_POST['name'] ?? '';
-    $date_of_lending = $_POST['date'] ?? '';
+    $date_of_cho vay = $_POST['date'] ?? '';
     $amount = $_POST['amount'] ?? 0;
     $description = $_POST['description'] ?? '';
     $status = $_POST['status'] ?? 'pending';
 
-    if (empty($name) || empty($date_of_lending) || empty($amount)) {
+    if (empty($name) || empty($date_of_cho vay) || empty($amount)) {
         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
         exit;
     }
 
-    $stmt = $db->prepare("INSERT INTO lending (name, UserId, date_of_lending, amount, description, status) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sissss", $name, $userid, $date_of_lending, $amount, $description, $status);
+    $stmt = $db->prepare("INSERT INTO cho vay (name, UserId, date_of_cho vay, amount, description, status) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sissss", $name, $userid, $date_of_cho vay, $amount, $description, $status);
 
     if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'New lending record created successfully']);
+        echo json_encode(['status' => 'success', 'message' => 'New cho vay record created successfully']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
     }
@@ -40,3 +40,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>
+

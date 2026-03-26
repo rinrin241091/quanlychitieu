@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -30,18 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $statusCondition = " AND status='received'";
     }
     
-    $query = "SELECT * FROM lending WHERE UserId='$userid' $statusCondition ORDER BY date_of_lending DESC LIMIT $limit OFFSET $offset";
-    $countQuery = "SELECT COUNT(*) as total FROM lending WHERE UserId='$userid' $statusCondition";
+    $query = "SELECT * FROM cho vay WHERE UserId='$userid' $statusCondition ORDER BY date_of_cho vay DESC LIMIT $limit OFFSET $offset";
+    $countQuery = "SELECT COUNT(*) as total FROM cho vay WHERE UserId='$userid' $statusCondition";
     
     $result = mysqli_query($db, $query);
-    $lending = [];
+    $cho vay = [];
     
     if ($result && mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $lending[] = [
+            $cho vay[] = [
                 'id' => (int)$row['id'],
                 'name' => $row['name'],
-                'date_of_lending' => $row['date_of_lending'],
+                'date_of_cho vay' => $row['date_of_cho vay'],
                 'amount' => (float)$row['amount'],
                 'description' => $row['description'],
                 'status' => $row['status'],
@@ -55,18 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $total = (int)$countData['total'];
     $total_pages = ceil($total / $limit);
     
-    $pendingQuery = mysqli_query($db, "SELECT SUM(amount) as total FROM lending WHERE UserId='$userid' AND status='pending'");
+    $pendingQuery = mysqli_query($db, "SELECT SUM(amount) as total FROM cho vay WHERE UserId='$userid' AND status='pending'");
     $pendingData = mysqli_fetch_assoc($pendingQuery);
     $total_pending = (float)($pendingData['total'] ?? 0);
     
-    $receivedQuery = mysqli_query($db, "SELECT SUM(amount) as total FROM lending WHERE UserId='$userid' AND status='received'");
+    $receivedQuery = mysqli_query($db, "SELECT SUM(amount) as total FROM cho vay WHERE UserId='$userid' AND status='received'");
     $receivedData = mysqli_fetch_assoc($receivedQuery);
     $total_received = (float)($receivedData['total'] ?? 0);
     
     echo json_encode([
         'status' => 'success',
         'data' => [
-            'lending' => $lending,
+            'cho vay' => $cho vay,
             'summary' => [
                 'total_pending' => $total_pending,
                 'total_received' => $total_received
@@ -84,3 +84,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>
+

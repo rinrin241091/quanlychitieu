@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 error_reporting(0);
 include('database.php');
@@ -13,7 +13,7 @@ if (empty($_SESSION['detsuid'])) {
 
     <head>
         <meta charset="UTF-8">
-        <title>Add Income</title>
+        <title>Add Thu nhap</title>
         <link rel="stylesheet" href="css/style.css">
         <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -68,56 +68,56 @@ if (empty($_SESSION['detsuid'])) {
         <div class="sidebar">
             <div class="logo-details">
                 <i class='bx bx-album'></i>
-                <span class="logo_name">Income Tracker</span>
+                <span class="logo_name">Thu nhap Tracker</span>
             </div>
             <ul class="nav-links">
                 <li>
                     <a href="home.php">
                         <i class='bx bx-grid-alt'></i>
-                        <span class="links_name">Dashboard</span>
+                        <span class="links_name">Tong quan</span>
                     </a>
                 </li>
                 <li>
                     <a href="add-expenses.php">
                         <i class='bx bx-box'></i>
-                        <span class="links_name">Expenses</span>
+                        <span class="links_name">Chi tieu</span>
                     </a>
                 </li>
                 <li>
                     <a href="add-income.php" class="active">
                         <i class='bx bx-box'></i>
-                        <span class="links_name">Income</span>
+                        <span class="links_name">Thu nhap</span>
                     </a>
                 </li>
                 <li>
                     <a href="manage-transaction.php">
                         <i class='bx bx-list-ul'></i>
-                        <span class="links_name">Manage List</span>
+                        <span class="links_name">Quan ly giao dich</span>
                     </a>
                 </li>
             
                 <li>
-                    <a href="lending.php">
+                    <a href="cho vay.php">
                         <i class='bx bx-money'></i>
-                        <span class="links_name">Lending</span>
+                        <span class="links_name">Cho vay</span>
                     </a>
                 </li>
                 <li>
-                    <a href="manage-lending.php">
+                    <a href="manage-cho vay.php">
                         <i class='bx bx-coin-stack'></i>
-                        <span class="links_name">Manage Lending</span>
+                        <span class="links_name">Quan ly cho vay</span>
                     </a>
                 </li>
                 <li>
                     <a href="analytics.php">
                         <i class='bx bx-pie-chart-alt-2'></i>
-                        <span class="links_name">Analytics</span>
+                        <span class="links_name">Phan tich</span>
                     </a>
                 </li>
                 <li>
                     <a href="report.php">
                         <i class="bx bx-file"></i>
-                        <span class="links_name">Report</span>
+                        <span class="links_name">Bao cao</span>
                     </a>
                 </li>
                 <li>
@@ -138,7 +138,7 @@ if (empty($_SESSION['detsuid'])) {
             <nav>
                 <div class="sidebar-button">
                     <i class='bx bx-menu sidebarBtn'></i>
-                    <span class="dashboard">Income Tracker</span>
+                    <span class="dashboard">Thu nhap Tracker</span>
                 </div>
 
                 <?php
@@ -177,12 +177,12 @@ if (empty($_SESSION['detsuid'])) {
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h4 class="card-title">Add Income</h4>
+                                        <h4 class="card-title">Add Thu nhap</h4>
                                     </div>
                                     <div class="col-md-6 text-right">
                                         <div class="ml-auto">
                                             <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#add-category-modal">
-                                                <i class="fas fa-plus-circle"></i> Add Category
+                                                <i class="fas fa-plus-circle"></i> Them danh muc
                                             </button>
                                         </div>
                                     </div>
@@ -192,9 +192,9 @@ if (empty($_SESSION['detsuid'])) {
                                             <div class="modal-content">
                                                 <form id="add-category-form" method="post" action="add_category.php">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="add-category-modal-title">Add Income Category</h5>
+                                                        <h5 class="modal-title" id="add-category-modal-title">Add Thu nhap Category</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span>
+                                                            <span aria-hidden="true">Ã—</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
@@ -206,7 +206,7 @@ if (empty($_SESSION['detsuid'])) {
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-primary" name="add-category-submit">Add Category</button>
+                                                        <button type="submit" class="btn btn-primary" name="add-category-submit">Them danh muc</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -217,7 +217,7 @@ if (empty($_SESSION['detsuid'])) {
                             <div class="card-body">
                                 <form id="incomeForm" role="form" class="needs-validation">
                                     <div class="form-group">
-                                        <label for="incomeDate">Date of Income</label>
+                                        <label for="incomeDate">Date of Thu nhap</label>
                                         <input class="form-control" type="date" id="incomeDate" name="incomeDate" value="<?php echo date('Y-m-d'); ?>">
                                     </div>
 
@@ -231,7 +231,7 @@ if (empty($_SESSION['detsuid'])) {
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="incomeAmount">Amount of Income</label>
+                                        <label for="incomeAmount">Amount of Thu nhap</label>
                                         <input class="form-control" type="number" id="incomeAmount" name="incomeAmount" required>
                                     </div>
 
@@ -245,7 +245,7 @@ if (empty($_SESSION['detsuid'])) {
                                     </div>
                                 </form>
                                 <div id="success-message" class="alert alert-success" style="display:none;">
-                                    Income added successfully.
+                                    Thu nhap added successfully.
                                 </div>
                             </div>
                         </div>
@@ -313,7 +313,7 @@ if (empty($_SESSION['detsuid'])) {
               });
             });
 
-            // Add Category AJAX handler
+            // Them danh muc AJAX handler
             $('#add-category-form').on('submit', function(e) {
               e.preventDefault();
               $.ajax({

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $expenseIdx = array_search('expense', $header);
     $incomeIdx = array_search('income', $header);
     $categoryIdx = array_search('category', $header);
-    $isLendingIdx = array_search('is_lending', $header);
+    $isCho vayIdx = array_search('is_cho vay', $header);
 
     if ($dateIdx === false || $particularsIdx === false) {
         fclose($handle);
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $expense = floatval(trim($row[$expenseIdx] ?? 0));
             $income = floatval(trim($row[$incomeIdx] ?? 0));
             $categoryName = trim($row[$categoryIdx] ?? 'General');
-            $isLending = strtolower(trim($row[$isLendingIdx] ?? 'no'));
+            $isCho vay = strtolower(trim($row[$isCho vayIdx] ?? 'no'));
 
             if (empty($date)) continue;
 
@@ -118,11 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 continue;
             }
 
-            if ($isLending === 'yes' || $isLending === '1' || $isLending === 'true') {
+            if ($isCho vay === 'yes' || $isCho vay === '1' || $isCho vay === 'true') {
                 $status = $expense > 0 ? 'pending' : 'received';
                 $amount = $expense > 0 ? $expense : $income;
                 
-                $stmt = $db->prepare("INSERT INTO lending (UserId, name, date_of_lending, amount, description, status) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt = $db->prepare("INSERT INTO cho vay (UserId, name, date_of_cho vay, amount, description, status) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("issdss", $userid, $particulars, $date, $amount, $particulars, $status);
                 $stmt->execute();
                 $stmt->close();
@@ -147,12 +147,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 
                 if ($expense > 0) {
-                    $stmt = $db->prepare("INSERT INTO tblexpense (UserId, ExpenseDate, CategoryId, category, ExpenseCost, Description) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt = $db->prepare("INSERT INTO tblexpense (UserId, Chi tieuDate, CategoryId, category, Chi tieuCost, Description) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->bind_param("isisss", $userid, $date, $catId, $categoryName, $expense, $particulars);
                     $stmt->execute();
                     $stmt->close();
                 } else if ($income > 0) {
-                    $stmt = $db->prepare("INSERT INTO tblincome (UserId, IncomeDate, CategoryId, category, IncomeAmount, Description) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt = $db->prepare("INSERT INTO tblincome (UserId, Thu nhapDate, CategoryId, category, Thu nhapAmount, Description) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->bind_param("isisss", $userid, $date, $catId, $categoryName, $income, $particulars);
                     $stmt->execute();
                     $stmt->close();
@@ -180,3 +180,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>
+

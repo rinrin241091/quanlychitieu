@@ -1,4 +1,4 @@
-<head>
+﻿<head>
     <!-- Font Awesome -->
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -90,7 +90,7 @@
                   <div class="form-check d-flex justify-content-center mb-3">
                     <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required/>
                     <label class="form-check-label" for="form2Example3">
-                      I agree all statements in <a href="#!">Terms of service</a>
+                      I agree all statements in <a href="#!">Terms of dich vu</a>
                     </label>
                   </div>
 
@@ -101,7 +101,7 @@
                     </button>
                   </div>
 
-                <p class="text-center text-muted ">Have already an account? <a href="index.php"
+                <p class="text-center text-muted ">Have already an tai khoan? <a href="index.php"
                     class="fw-bold text-body link-danger"><u>Login here</u></a></p>
 
                 </form>
@@ -272,3 +272,4 @@ document.querySelector("#signupForm").addEventListener("submit", function(e) {
     });
 });
 </script>
+

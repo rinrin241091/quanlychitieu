@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 $userid = $_SESSION['detsuid'];
 
@@ -11,7 +11,7 @@ if (!$db) {
 }
 
 // Retrieve total expense of each category
-$query = "SELECT category, SUM(ExpenseCost) AS total_expense FROM tblexpense WHERE UserId = ? GROUP BY category";
+$query = "SELECT category, SUM(Chi tieuCost) AS total_expense FROM tblexpense WHERE UserId = ? GROUP BY category";
 $stmt = mysqli_prepare($db, $query);
 mysqli_stmt_bind_param($stmt, "i", $userid); // Bind the user ID parameter to the statement
 mysqli_stmt_execute($stmt);
@@ -40,3 +40,4 @@ foreach ($data as &$item) {
 
 
 ?>
+

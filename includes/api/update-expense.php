@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -34,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoryName = $catRow ? $catRow['CategoryName'] : '';
     $catStmt->close();
 
-    $stmt = $db->prepare("UPDATE tblexpense SET ExpenseDate = ?, CategoryId = ?, category = ?, ExpenseCost = ?, Description = ? WHERE ID = ? AND UserId = ?");
+    $stmt = $db->prepare("UPDATE tblexpense SET Chi tieuDate = ?, CategoryId = ?, category = ?, Chi tieuCost = ?, Description = ? WHERE ID = ? AND UserId = ?");
     $stmt->bind_param("sisssii", $dateexpense, $category, $categoryName, $cost, $description, $expenseId, $userid);
 
     if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Expense updated successfully']);
+        echo json_encode(['status' => 'success', 'message' => 'Chi tieu updated successfully']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
     }
@@ -48,3 +48,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>
+

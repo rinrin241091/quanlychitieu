@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -25,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $stmt = $db->prepare("INSERT INTO tblexpense (UserId, ExpenseDate, CategoryId, category, ExpenseCost, Description) SELECT ?, ?, CategoryId, CategoryName, ?, ? FROM tblcategory WHERE CategoryId = ?");
+    $stmt = $db->prepare("INSERT INTO tblexpense (UserId, Chi tieuDate, CategoryId, category, Chi tieuCost, Description) SELECT ?, ?, CategoryId, CategoryName, ?, ? FROM tblcategory WHERE CategoryId = ?");
     $stmt->bind_param("isiss", $userid, $dateexpense, $costitem, $Description, $category);
 
     if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Expense added successfully']);
+        echo json_encode(['status' => 'success', 'message' => 'Chi tieu added successfully']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
     }
@@ -39,3 +39,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>
+

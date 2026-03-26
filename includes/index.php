@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +51,7 @@
               <span id="loginText">Login</span>
               <span id="loginSpinner" class="spinner-border spinner-border-sm" role="status" style="display:none;"></span>
             </button>
-            <p class="small fw-bold mt-3 pt-1 mb-0 text-center text-md-start">Don't have an account? <a href="signup.php" class="link-danger">Create account</a></p>
+            <p class="small fw-bold mt-3 pt-1 mb-0 text-center text-md-start">Don't have an tai khoan? <a href="signup.php" class="link-danger">Create tai khoan</a></p>
           </div>
         </form>
       </div>

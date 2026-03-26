@@ -1,4 +1,4 @@
-<?php include "head.php" ?>
+﻿<?php include "head.php" ?>
 <body>
     <!-- ==== HEADER ==== -->
     <header class="container header">
@@ -15,16 +15,16 @@
 
           <ul class="nav_menu_list">
             <li class="nav_menu_item">
-              <a href="#" class="nav_menu_link">account</a>
+              <a href="#" class="nav_menu_link">tai khoan</a>
             </li>
             <li class="nav_menu_item">
-              <a href="#" class="nav_menu_link">about</a>
+              <a href="#" class="nav_menu_link">gioi thieu</a>
             </li>
             <li class="nav_menu_item">
-              <a href="#" class="nav_menu_link">service</a>
+              <a href="#" class="nav_menu_link">dich vu</a>
             </li>
             <li class="nav_menu_item">
-              <a href="#" class="nav_menu_link">contact</a>
+              <a href="#" class="nav_menu_link">lien he</a>
             </li>
           </ul>
         </div>

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     if ($type === 'expense') {
         $query = "
-            SELECT ID, 'Expense' as Type, Category, ExpenseCost as Amount, Description, ExpenseDate as TransactionDate 
+            SELECT ID, 'Chi tieu' as Type, Category, Chi tieuCost as Amount, Description, Chi tieuDate as TransactionDate 
             FROM tblexpense WHERE userid='$userid'
             ORDER BY TransactionDate DESC
             LIMIT $limit OFFSET $offset
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $countQuery = "SELECT COUNT(*) as total FROM tblexpense WHERE userid='$userid'";
     } elseif ($type === 'income') {
         $query = "
-            SELECT ID, 'Income' as Type, Category, IncomeAmount as Amount, Description, IncomeDate as TransactionDate 
+            SELECT ID, 'Thu nhap' as Type, Category, Thu nhapAmount as Amount, Description, Thu nhapDate as TransactionDate 
             FROM tblincome WHERE userid='$userid'
             ORDER BY TransactionDate DESC
             LIMIT $limit OFFSET $offset
@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $countQuery = "SELECT COUNT(*) as total FROM tblincome WHERE userid='$userid'";
     } else {
         $query = "
-            SELECT ID, 'Expense' as Type, Category, ExpenseCost as Amount, Description, ExpenseDate as TransactionDate 
+            SELECT ID, 'Chi tieu' as Type, Category, Chi tieuCost as Amount, Description, Chi tieuDate as TransactionDate 
             FROM tblexpense WHERE userid='$userid'
             UNION ALL
-            SELECT ID, 'Income' as Type, Category, IncomeAmount as Amount, Description, IncomeDate as TransactionDate 
+            SELECT ID, 'Thu nhap' as Type, Category, Thu nhapAmount as Amount, Description, Thu nhapDate as TransactionDate 
             FROM tblincome WHERE userid='$userid'
             ORDER BY TransactionDate DESC
             LIMIT $limit OFFSET $offset
@@ -96,3 +96,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>
+

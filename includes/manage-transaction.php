@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 error_reporting(0);
 include('database.php');
@@ -30,14 +30,14 @@ $sessionValid = !empty($_SESSION['detsuid']);
 <div class="sidebar">
     <div class="logo-details"><i class='bx bx-album'></i><span class="logo_name">Expenditure</span></div>
     <ul class="nav-links">
-        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a></li>
-        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Expenses</span></a></li>
-        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Income</span></a></li>
-        <li><a href="manage-transaction.php" class="active"><i class='bx bx-list-ul'></i><span class="links_name">Manage List</span></a></li>
-        <li><a href="lending.php"><i class='bx bx-money'></i><span class="links_name">lending</span></a></li>
-        <li><a href="manage-lending.php"><i class='bx bx-coin-stack'></i><span class="links_name">Manage lending</span></a></li>
-        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Analytics</span></a></li>
-        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Report</span></a></li>
+        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Tong quan</span></a></li>
+        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Chi tieu</span></a></li>
+        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Thu nhap</span></a></li>
+        <li><a href="manage-transaction.php" class="active"><i class='bx bx-list-ul'></i><span class="links_name">Quan ly giao dich</span></a></li>
+        <li><a href="cho vay.php"><i class='bx bx-money'></i><span class="links_name">cho vay</span></a></li>
+        <li><a href="manage-cho vay.php"><i class='bx bx-coin-stack'></i><span class="links_name">Quan ly cho vay</span></a></li>
+        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Phan tich</span></a></li>
+        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Bao cao</span></a></li>
         <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name">Setting</span></a></li>
         <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
     </ul>
@@ -47,7 +47,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
     <nav>
         <div class="sidebar-button"><i class='bx bx-menu sidebarBtn'></i><span class="dashboard">Expenditure</span></div>
         <div class="search-box">
-            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Search...">
+            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Tim kiem...">
             <i class='bx bx-search'></i>
         </div>
         <div class="profile-details">
@@ -85,8 +85,8 @@ $sessionValid = !empty($_SESSION['detsuid']);
                                             </label>
                                             <select class="form-control-sm ml-2" id="type-filter">
                                                 <option value="all">All</option>
-                                                <option value="expense">Expenses</option>
-                                                <option value="income">Income</option>
+                                                <option value="expense">Chi tieu</option>
+                                                <option value="income">Thu nhap</option>
                                             </select>
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-info"><strong>CSV Format:</strong> Date, Particulars, Expense, Income, Category, Is_Lending</div>
+                    <div class="alert alert-info"><strong>CSV Format:</strong> Date, Particulars, Chi tieu, Thu nhap, Category, Is_Cho vay</div>
                     <div class="form-group">
                         <label for="csv-file">Select CSV File</label>
                         <input type="file" class="form-control-file" id="csv-file" name="csv-file" accept=".csv" required>
@@ -199,7 +199,7 @@ function renderTransactions(transactions, pagination) {
     var startIdx = (pagination.current_page - 1) * pagination.limit + 1;
     
     transactions.forEach(function(item, index) {
-        var badgeClass = item.type === 'Income' ? 'badge-success' : 'badge-danger';
+        var badgeClass = item.type === 'Thu nhap' ? 'badge-success' : 'badge-danger';
         html += '<tr>' +
             '<td>' + (startIdx + index) + '</td>' +
             '<td><span class="badge ' + badgeClass + '">' + item.type + '</span></td>' +
@@ -331,3 +331,4 @@ toggleButton.addEventListener('click', () => { profileOptions.classList.toggle('
 </script>
 </body>
 </html>
+

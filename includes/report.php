@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 error_reporting(0);
 include('database.php');
@@ -28,14 +28,14 @@ $sessionValid = !empty($_SESSION['detsuid']);
 <div class="sidebar">
     <div class="logo-details"><i class='bx bx-album'></i><span class="logo_name">Expenditure</span></div>
     <ul class="nav-links">
-        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a></li>
-        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Expenses</span></a></li>
-        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Income</span></a></li>
-        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Manage List</span></a></li>
-        <li><a href="lending.php"><i class='bx bx-money'></i><span class="links_name">lending</span></a></li>
-        <li><a href="manage-lending.php"><i class='bx bx-coin-stack'></i><span class="links_name">Manage lending</span></a></li>
-        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Analytics</span></a></li>
-        <li><a href="report.php" class="active"><i class="bx bx-file"></i><span class="links_name">Report</span></a></li>
+        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Tong quan</span></a></li>
+        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Chi tieu</span></a></li>
+        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Thu nhap</span></a></li>
+        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Quan ly giao dich</span></a></li>
+        <li><a href="cho vay.php"><i class='bx bx-money'></i><span class="links_name">cho vay</span></a></li>
+        <li><a href="manage-cho vay.php"><i class='bx bx-coin-stack'></i><span class="links_name">Quan ly cho vay</span></a></li>
+        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Phan tich</span></a></li>
+        <li><a href="report.php" class="active"><i class="bx bx-file"></i><span class="links_name">Bao cao</span></a></li>
         <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name">Setting</span></a></li>
         <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
     </ul>
@@ -61,20 +61,20 @@ $sessionValid = !empty($_SESSION['detsuid']);
                 <br>
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Generate Report</h4>
+                        <h4 class="card-title">Generate Bao cao</h4>
                     </div>
                     <div class="card-body">
                         <form id="reportForm">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="reportType">Report Type</label>
+                                        <label for="reportType">Bao cao Type</label>
                                         <select class="form-control" id="reportType" name="reportType" required>
                                             <option value="" disabled selected>Select a report type</option>
-                                            <option value="expense">Expense Report</option>
-                                            <option value="income">Income Report</option>
-                                            <option value="pending">Pending Lending Report</option>
-                                            <option value="received">Received Lending Report</option>
+                                            <option value="expense">Chi tieu Bao cao</option>
+                                            <option value="income">Thu nhap Bao cao</option>
+                                            <option value="pending">Pending Cho vay Bao cao</option>
+                                            <option value="received">Received Cho vay Bao cao</option>
                                         </select>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
                                     <div class="form-group">
                                         <label>&nbsp;</label>
                                         <button type="submit" class="btn btn-primary btn-block" id="generateBtn">
-                                            <span id="btnText">Generate Report</span>
+                                            <span id="btnText">Generate Bao cao</span>
                                             <span id="btnSpinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
                                         </button>
                                     </div>
@@ -109,7 +109,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-md-6">
-                                    <h4 class="card-title mb-0" id="report-title">Report Results</h4>
+                                    <h4 class="card-title mb-0" id="report-title">Bao cao Results</h4>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <span id="date-range" class="text-muted"></span>
@@ -194,7 +194,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
-                    displayReport(response);
+                    displayBao cao(response);
                 } else {
                     alert(response.message || 'Error generating report');
                 }
@@ -216,19 +216,19 @@ $(document).ready(function() {
     });
 });
 
-function displayReport(response) {
+function displayBao cao(response) {
     var reportType = response.report_type;
     var data = response.data;
     var summary = response.summary;
     
     var titles = {
-        'expense': 'Expense Report',
-        'income': 'Income Report',
-        'pending': 'Pending Lending Report',
-        'received': 'Received Lending Report'
+        'expense': 'Chi tieu Bao cao',
+        'income': 'Thu nhap Bao cao',
+        'pending': 'Pending Cho vay Bao cao',
+        'received': 'Received Cho vay Bao cao'
     };
     
-    $('#report-title').text(titles[reportType] || 'Report');
+    $('#report-title').text(titles[reportType] || 'Bao cao');
     $('#date-range').text(response.date_range.start + ' to ' + response.date_range.end);
     $('#total-records').text(summary.total_records || 0);
     
@@ -295,3 +295,4 @@ toggleButton.addEventListener('click', () => { profileOptions.classList.toggle('
 </script>
 </body>
 </html>
+

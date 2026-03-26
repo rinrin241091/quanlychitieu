@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -19,40 +19,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $ydate = date('Y-m-d', strtotime("-1 days"));
     $monthdate = date("Y-m-d", strtotime("-1 month"));
     
-    $todayQuery = mysqli_query($db, "SELECT sum(ExpenseCost) as todaysexpense FROM tblexpense WHERE ExpenseDate='$tdate' AND UserId='$userid'");
+    $todayQuery = mysqli_query($db, "SELECT sum(Chi tieuCost) as todaysexpense FROM tblexpense WHERE Chi tieuDate='$tdate' AND UserId='$userid'");
     $todayResult = mysqli_fetch_array($todayQuery);
     $sum_today_expense = $todayResult['todaysexpense'] ?? 0;
     
-    $yesterdayQuery = mysqli_query($db, "SELECT sum(ExpenseCost) as yesterdayexpense FROM tblexpense WHERE ExpenseDate='$ydate' AND UserId='$userid'");
+    $yesterdayQuery = mysqli_query($db, "SELECT sum(Chi tieuCost) as yesterdayexpense FROM tblexpense WHERE Chi tieuDate='$ydate' AND UserId='$userid'");
     $yesterdayResult = mysqli_fetch_array($yesterdayQuery);
     $sum_yesterday_expense = $yesterdayResult['yesterdayexpense'] ?? 0;
     
-    $monthlyQuery = mysqli_query($db, "SELECT sum(ExpenseCost) as monthlyexpense FROM tblexpense WHERE ExpenseDate BETWEEN '$monthdate' AND '$tdate' AND UserId='$userid'");
+    $monthlyQuery = mysqli_query($db, "SELECT sum(Chi tieuCost) as monthlyexpense FROM tblexpense WHERE Chi tieuDate BETWEEN '$monthdate' AND '$tdate' AND UserId='$userid'");
     $monthlyResult = mysqli_fetch_array($monthlyQuery);
     $sum_monthly_expense = $monthlyResult['monthlyexpense'] ?? 0;
     
-    $totalQuery = mysqli_query($db, "SELECT sum(ExpenseCost) as totalexpense FROM tblexpense WHERE UserId='$userid'");
+    $totalQuery = mysqli_query($db, "SELECT sum(Chi tieuCost) as totalexpense FROM tblexpense WHERE UserId='$userid'");
     $totalResult = mysqli_fetch_array($totalQuery);
     $sum_total_expense = $totalResult['totalexpense'] ?? 0;
     
-    $totalIncomeQuery = mysqli_query($db, "SELECT sum(IncomeAmount) as totalincome FROM tblincome WHERE UserId='$userid'");
-    $totalIncomeResult = mysqli_fetch_array($totalIncomeQuery);
-    $sum_total_income = $totalIncomeResult['totalincome'] ?? 0;
+    $totalThu nhapQuery = mysqli_query($db, "SELECT sum(Thu nhapAmount) as totalincome FROM tblincome WHERE UserId='$userid'");
+    $totalThu nhapResult = mysqli_fetch_array($totalThu nhapQuery);
+    $sum_total_income = $totalThu nhapResult['totalincome'] ?? 0;
     
     $userQuery = mysqli_query($db, "SELECT name, email FROM users WHERE id='$userid'");
     $userResult = mysqli_fetch_array($userQuery);
     $userName = $userResult['name'] ?? '';
     $userEmail = $userResult['email'] ?? '';
     
-    $chartQuery = mysqli_query($db, "SELECT ExpenseDate, SUM(ExpenseCost) as total_cost FROM tblexpense WHERE UserId='$userid' AND ExpenseDate > DATE_SUB(NOW(), INTERVAL 30 day) GROUP BY ExpenseDate ORDER BY ExpenseDate ASC");
+    $chartQuery = mysqli_query($db, "SELECT Chi tieuDate, SUM(Chi tieuCost) as total_cost FROM tblexpense WHERE UserId='$userid' AND Chi tieuDate > DATE_SUB(NOW(), INTERVAL 30 day) GROUP BY Chi tieuDate ORDER BY Chi tieuDate ASC");
     $chartData = [];
     $chartLabels = [];
     while ($row = mysqli_fetch_array($chartQuery)) {
         $chartData[] = (float)$row['total_cost'];
-        $chartLabels[] = date('Y-m-d', strtotime($row['ExpenseDate']));
+        $chartLabels[] = date('Y-m-d', strtotime($row['Chi tieuDate']));
     }
     
-    $categoryQuery = mysqli_query($db, "SELECT c.CategoryName as category, SUM(e.ExpenseCost) as total_expense FROM tblexpense e JOIN tblcategory c ON e.CategoryId = c.CategoryId WHERE e.UserId='$userid' GROUP BY c.CategoryName ORDER BY total_expense DESC LIMIT 10");
+    $categoryQuery = mysqli_query($db, "SELECT c.CategoryName as category, SUM(e.Chi tieuCost) as total_expense FROM tblexpense e JOIN tblcategory c ON e.CategoryId = c.CategoryId WHERE e.UserId='$userid' GROUP BY c.CategoryName ORDER BY total_expense DESC LIMIT 10");
     $categories = [];
     while ($row = mysqli_fetch_array($categoryQuery)) {
         $categories[] = [
@@ -86,3 +86,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>
+
