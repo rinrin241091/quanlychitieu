@@ -1,4 +1,7 @@
 ﻿<?php
+header('Location: home.php');
+exit;
+
 session_start();
 error_reporting(0);
 include('database.php');
@@ -13,7 +16,7 @@ if (empty($_SESSION['detsuid'])) {
 
   <head>
     <meta charset="UTF-8">
-    <!--<title> Responsiive Admin Tong quan | CodingLab </title>-->
+    <!--<title> Responsiive Admin Dashboard | CodingLab </title>-->
     <link rel="stylesheet" href="css/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -76,50 +79,44 @@ if (empty($_SESSION['detsuid'])) {
         <li>
           <a href="home.php">
             <i class='bx bx-grid-alt'></i>
-            <span class="links_name">Tong quan</span>
+            <span class="links_name">Dashboard</span>
           </a>
         </li>
         <li>
           <a href="add-expenses.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Chi tieu</span>
+            <span class="links_name">Expenses</span>
           </a>
         </li>
         <li>
           <a href="add-income.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Thu nhap</span>
+            <span class="links_name">Income</span>
           </a>
         </li>
         <li>
           <a href="manage-transaction.php">
             <i class='bx bx-list-ul'></i>
-            <span class="links_name">Quan ly giao dich</span>
+            <span class="links_name">Manage List</span>
           </a>
         </li>
 
         <li>
           <a href="#" class="active">
             <i class='bx bx-money'></i>
-            <span class="links_name">cho vay</span>
-          </a>
-        </li>
-        <li>
-          <a href="manage-cho vay.php">
-            <i class='bx bx-coin-stack'></i>
-            <span class="links_name">Quan ly cho vay</span>
+            <span class="links_name">lending</span>
           </a>
         </li>
         <li>
           <a href="#">
             <i class='bx bx-pie-chart-alt-2'></i>
-            <span class="links_name">Phan tich</span>
+            <span class="links_name">Analytics</span>
           </a>
         </li>
         <li>
           <a href="report.php">
             <i class="bx bx-file"></i>
-            <span class="links_name">Bao cao</span>
+            <span class="links_name">Report</span>
           </a>
         </li>
         <li>
@@ -187,7 +184,7 @@ if (empty($_SESSION['detsuid'])) {
               <div class="card-header">
                 <div class="row">
                   <div class="col-md-6">
-                    <h4 class="card-title">Add cho vay</h4>
+                    <h4 class="card-title">Add lending</h4>
 
                   </div>
 
@@ -199,14 +196,14 @@ if (empty($_SESSION['detsuid'])) {
 
 
               <div class="card-body">
-                <form id="cho vayForm">
+                <form id="lendingForm">
                   <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" class="form-control" id="name" name="name" required>
                   </div>
 
                   <div class="form-group">
-                    <label for="date">Date of Cho vay:</label>
+                    <label for="date">Date of Lending:</label>
                     <input type="date" class="form-control" id="date" name="date" required>
                   </div>
                   <div class="form-group">
@@ -230,17 +227,17 @@ if (empty($_SESSION['detsuid'])) {
               </div>
               <script>
                 $(document).ready(function() {
-                  $('#cho vayForm').on('submit', function(e) {
+                  $('#lendingForm').on('submit', function(e) {
                     e.preventDefault();
                     $.ajax({
-                      url: 'api/cho vay.php',
+                      url: 'api/lending.php',
                       type: 'POST',
                       data: $(this).serialize(),
                       dataType: 'json',
                       success: function(response) {
                         if (response.status === 'success') {
                           alert(response.message);
-                          window.location.href = 'manage-cho vay.php';
+                          window.location.href = 'manage-lending.php';
                         } else {
                           alert(response.message);
                         }

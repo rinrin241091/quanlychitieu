@@ -1,7 +1,8 @@
-﻿<?php
+<?php
 session_start();
 error_reporting(0);
 include('database.php');
+include_once('i18n.php');
 
 if (empty($_SESSION['detsuid'])) {
     header('location:logout.php');
@@ -9,11 +10,11 @@ if (empty($_SESSION['detsuid'])) {
 ?>
 
     <!DOCTYPE html>
-    <html lang="en" dir="ltr">
+    <html lang="<?php echo htmlspecialchars(current_lang(), ENT_QUOTES, 'UTF-8'); ?>" dir="ltr">
 
     <head>
         <meta charset="UTF-8">
-        <title>Add Thu nhap</title>
+        <title><?php echo t('add_income'); ?></title>
         <link rel="stylesheet" href="css/style.css">
         <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -68,68 +69,56 @@ if (empty($_SESSION['detsuid'])) {
         <div class="sidebar">
             <div class="logo-details">
                 <i class='bx bx-album'></i>
-                <span class="logo_name">Thu nhap Tracker</span>
+                <span class="logo_name"><?php echo t('income_tracker'); ?></span>
             </div>
             <ul class="nav-links">
                 <li>
-                    <a href="home.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('home.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class='bx bx-grid-alt'></i>
-                        <span class="links_name">Tong quan</span>
+                        <span class="links_name"><?php echo t('dashboard'); ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="add-expenses.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('add-expenses.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class='bx bx-box'></i>
-                        <span class="links_name">Chi tieu</span>
+                        <span class="links_name"><?php echo t('expenses'); ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="add-income.php" class="active">
+                    <a href="<?php echo htmlspecialchars(with_lang('add-income.php'), ENT_QUOTES, 'UTF-8'); ?>" class="active">
                         <i class='bx bx-box'></i>
-                        <span class="links_name">Thu nhap</span>
+                        <span class="links_name"><?php echo t('income'); ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="manage-transaction.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('manage-transaction.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class='bx bx-list-ul'></i>
-                        <span class="links_name">Quan ly giao dich</span>
+                        <span class="links_name"><?php echo t('manage_list'); ?></span>
                     </a>
                 </li>
             
                 <li>
-                    <a href="cho vay.php">
-                        <i class='bx bx-money'></i>
-                        <span class="links_name">Cho vay</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="manage-cho vay.php">
-                        <i class='bx bx-coin-stack'></i>
-                        <span class="links_name">Quan ly cho vay</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="analytics.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('analytics.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class='bx bx-pie-chart-alt-2'></i>
-                        <span class="links_name">Phan tich</span>
+                        <span class="links_name"><?php echo t('analytics'); ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="report.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('report.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class="bx bx-file"></i>
-                        <span class="links_name">Bao cao</span>
+                        <span class="links_name"><?php echo t('report'); ?></span>
                     </a>
                 </li>
                 <li>
-                    <a href="user_profile.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('user_profile.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class='bx bx-cog'></i>
-                        <span class="links_name">Setting</span>
+                        <span class="links_name"><?php echo t('setting'); ?></span>
                     </a>
                 </li>
                 <li class="log_out">
-                    <a href="logout.php">
+                    <a href="<?php echo htmlspecialchars(with_lang('logout.php'), ENT_QUOTES, 'UTF-8'); ?>">
                         <i class='bx bx-log-out'></i>
-                        <span class="links_name">Log out</span>
+                        <span class="links_name"><?php echo t('logout'); ?></span>
                     </a>
                 </li>
             </ul>
@@ -138,7 +127,11 @@ if (empty($_SESSION['detsuid'])) {
             <nav>
                 <div class="sidebar-button">
                     <i class='bx bx-menu sidebarBtn'></i>
-                    <span class="dashboard">Thu nhap Tracker</span>
+                    <span class="dashboard"><?php echo t('income_tracker'); ?></span>
+                </div>
+                <div style="margin-left:auto; margin-right:12px; font-weight:600;">
+                    <a href="<?php echo htmlspecialchars(switch_lang_url('vi'), ENT_QUOTES, 'UTF-8'); ?>">VI</a> |
+                    <a href="<?php echo htmlspecialchars(switch_lang_url('en'), ENT_QUOTES, 'UTF-8'); ?>">EN</a>
                 </div>
 
                 <?php
@@ -154,8 +147,8 @@ if (empty($_SESSION['detsuid'])) {
                     <span class="admin_name"><?php echo $name; ?></span>
                     <i class='bx bx-chevron-down' id='profile-options-toggle'></i>
                     <ul class="profile-options" id='profile-options'>
-                        <li><a href="user_profile.php"><i class="fas fa-user-circle"></i> User Profile</a></li>
-                        <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        <li><a href="<?php echo htmlspecialchars(with_lang('user_profile.php'), ENT_QUOTES, 'UTF-8'); ?>"><i class="fas fa-user-circle"></i> <?php echo t('user_profile'); ?></a></li>
+                        <li><a href="<?php echo htmlspecialchars(with_lang('logout.php'), ENT_QUOTES, 'UTF-8'); ?>"><i class="fas fa-sign-out-alt"></i> <?php echo t('logout_title'); ?></a></li>
                     </ul>
                 </div>
                 <script>
@@ -177,12 +170,12 @@ if (empty($_SESSION['detsuid'])) {
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h4 class="card-title">Add Thu nhap</h4>
+                                        <h4 class="card-title"><?php echo t('add_income'); ?></h4>
                                     </div>
                                     <div class="col-md-6 text-right">
                                         <div class="ml-auto">
                                             <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#add-category-modal">
-                                                <i class="fas fa-plus-circle"></i> Them danh muc
+                                                <i class="fas fa-plus-circle"></i> <?php echo t('add_category'); ?>
                                             </button>
                                         </div>
                                     </div>
@@ -192,21 +185,21 @@ if (empty($_SESSION['detsuid'])) {
                                             <div class="modal-content">
                                                 <form id="add-category-form" method="post" action="add_category.php">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="add-category-modal-title">Add Thu nhap Category</h5>
+                                                        <h5 class="modal-title" id="add-category-modal-title"><?php echo t('add_income_category'); ?></h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">Ã—</span>
+                                                            <span aria-hidden="true">×</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group">
-                                                            <label for="category-name">Category Name</label>
+                                                            <label for="category-name"><?php echo t('category_name'); ?></label>
                                                             <input type="text" class="form-control" id="category-name" name="category-name" required>
                                                             <input type="hidden" name="mode" value="income">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-primary" name="add-category-submit">Them danh muc</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo t('cancel'); ?></button>
+                                                        <button type="submit" class="btn btn-primary" name="add-category-submit"><?php echo t('add_category'); ?></button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -217,7 +210,7 @@ if (empty($_SESSION['detsuid'])) {
                             <div class="card-body">
                                 <form id="incomeForm" role="form" class="needs-validation">
                                     <div class="form-group">
-                                        <label for="incomeDate">Date of Thu nhap</label>
+                                        <label for="incomeDate"><?php echo t('date_of_income'); ?></label>
                                         <input class="form-control" type="date" id="incomeDate" name="incomeDate" value="<?php echo date('Y-m-d'); ?>">
                                     </div>
 
@@ -231,7 +224,7 @@ if (empty($_SESSION['detsuid'])) {
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="incomeAmount">Amount of Thu nhap</label>
+                                        <label for="incomeAmount">Amount of Income</label>
                                         <input class="form-control" type="number" id="incomeAmount" name="incomeAmount" required>
                                     </div>
 
@@ -245,7 +238,7 @@ if (empty($_SESSION['detsuid'])) {
                                     </div>
                                 </form>
                                 <div id="success-message" class="alert alert-success" style="display:none;">
-                                    Thu nhap added successfully.
+                                    Income added successfully.
                                 </div>
                             </div>
                         </div>
@@ -313,7 +306,7 @@ if (empty($_SESSION['detsuid'])) {
               });
             });
 
-            // Them danh muc AJAX handler
+            // Add Category AJAX handler
             $('#add-category-form').on('submit', function(e) {
               e.preventDefault();
               $.ajax({

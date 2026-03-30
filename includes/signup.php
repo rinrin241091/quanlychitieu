@@ -1,4 +1,9 @@
-﻿<head>
+<?php
+header('Location: index.php');
+exit;
+include_once __DIR__ . '/i18n.php';
+?>
+<head>
     <!-- Font Awesome -->
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -29,6 +34,10 @@
   src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
 ></script>
 </head>
+<div style="position:fixed; top:12px; right:16px; z-index:9999; font-weight:600;">
+  <a href="<?php echo htmlspecialchars(switch_lang_url('vi'), ENT_QUOTES, 'UTF-8'); ?>">VI</a> |
+  <a href="<?php echo htmlspecialchars(switch_lang_url('en'), ENT_QUOTES, 'UTF-8'); ?>">EN</a>
+</div>
 <section >
   <div class="container h-100">
   
@@ -39,7 +48,7 @@
             <div class="row justify-content-center">
               <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"><?php echo t('signup_title'); ?></p>
 
                 <form class="mx-1 mx-md-4" id="signupForm">
                   <p id="error-msg" style="font-size:16px; color:red" class="text-center"></p>
@@ -49,7 +58,7 @@
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
                     <input type="text" class="form-control" name="name" id="name" required>
-                      <label class="form-label" for="name">Your Name</label>
+                      <label class="form-label" for="name"><?php echo t('your_name'); ?></label>
                     </div>
                   </div>
 
@@ -57,7 +66,7 @@
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
                       <input type="email" name="email" id="email" class="form-control" required/>
-                      <label class="form-label" for="email">Your Email</label>
+                      <label class="form-label" for="email"><?php echo t('your_email'); ?></label>
                     </div>
                   </div>
 
@@ -65,7 +74,7 @@
                     <i class="fas fa-phone fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
                       <input type="text" name="phone" id="phone" class="form-control" required/>
-                      <label class="form-label" for="phone">Mobile Number</label>
+                      <label class="form-label" for="phone"><?php echo t('mobile_number'); ?></label>
                     </div>
                   </div>
 
@@ -73,7 +82,7 @@
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0 position-relative">
                     <input type="password" class="form-control" name="password" id="password" required>
-                      <label class="form-label" for="password">Password</label>
+                      <label class="form-label" for="password"><?php echo t('password'); ?></label>
                       <i class="bx bx-hide show-hide"></i>
                     </div>
                   </div>
@@ -82,7 +91,7 @@
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0 position-relative">
                     <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
-                      <label class="form-label" for="confirm_password">Confirm Password</label>
+                      <label class="form-label" for="confirm_password"><?php echo t('confirm_password'); ?></label>
                       <i class="bx bx-hide show-hide"></i>
                     </div>
                   </div>
@@ -90,19 +99,19 @@
                   <div class="form-check d-flex justify-content-center mb-3">
                     <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required/>
                     <label class="form-check-label" for="form2Example3">
-                      I agree all statements in <a href="#!">Terms of dich vu</a>
+                      <?php echo t('terms_agree'); ?> <a href="#!"><?php echo t('terms_service'); ?></a>
                     </label>
                   </div>
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                     <button type="submit" id="signupBtn" class="btn btn-primary btn-lg">
-                      <span id="signupText">Create Account</span>
+                      <span id="signupText"><?php echo t('create_account'); ?></span>
                       <span id="signupSpinner" class="spinner-border spinner-border-sm" role="status" style="display:none;"></span>
                     </button>
                   </div>
 
-                <p class="text-center text-muted ">Have already an tai khoan? <a href="index.php"
-                    class="fw-bold text-body link-danger"><u>Login here</u></a></p>
+                <p class="text-center text-muted "><?php echo t('have_account'); ?> <a href="index.php"
+                  class="fw-bold text-body link-danger"><u><?php echo t('login_here'); ?></u></a></p>
 
                 </form>
                 
@@ -272,4 +281,3 @@ document.querySelector("#signupForm").addEventListener("submit", function(e) {
     });
 });
 </script>
-

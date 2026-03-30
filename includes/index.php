@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
+<?php include_once __DIR__ . '/i18n.php'; ?>
+<!DOCTYPE html>
+<html lang="<?php echo htmlspecialchars(current_lang(), ENT_QUOTES, 'UTF-8'); ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Expenditure - Login</title>
+<title><?php echo t('brand'); ?> - <?php echo t('login'); ?></title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" rel="stylesheet"/>
@@ -14,6 +15,11 @@
 </head>
 <body>
 
+<div style="position:fixed; top:12px; right:16px; z-index:9999; font-weight:600;">
+    <a href="<?php echo htmlspecialchars(switch_lang_url('vi'), ENT_QUOTES, 'UTF-8'); ?>">VI</a> |
+    <a href="<?php echo htmlspecialchars(switch_lang_url('en'), ENT_QUOTES, 'UTF-8'); ?>">EN</a>
+</div>
+
 <section class="vh-100">
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -22,36 +28,42 @@
       </div>
       <div class="col-12 col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form id="loginForm" class="login-form-container">
-          <h2 class="fw-bold mb-2 text-center text-uppercase">Login</h2>
-          <p class="text-black-50 text-center mb-4">Please enter your login and password!</p>
+                    <h2 class="fw-bold mb-2 text-center text-uppercase"><?php echo t('login'); ?></h2>
+                    <p class="text-black-50 text-center mb-4"><?php echo t('login_help'); ?></p>
           <p id="error-msg" style="font-size:16px; color:red" class="text-center"></p>
           <p id="success-msg" style="font-size:16px; color:green" class="text-center"></p>
           
           <div class="form-outline mb-4">
             <input type="email" id="email" name="email" class="form-control form-control-lg" required/>
-            <label class="form-label" for="email">Email address</label>
+            <label class="form-label" for="email"><?php echo t('email_address'); ?></label>
           </div>
 
           <div class="form-outline mb-3 position-relative">
             <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
-            <label class="form-label" for="password">Password</label>
+            <label class="form-label" for="password"><?php echo t('password'); ?></label>
             <i class="bx bx-hide show-hide"></i>
           </div>
+
+                    <div class="form-outline mb-3 position-relative">
+                        <input type="password" id="secondary_password" name="secondary_password" class="form-control form-control-lg"/>
+                        <label class="form-label" for="secondary_password">Mat khau cap 2</label>
+                        <i class="bx bx-hide show-hide"></i>
+                    </div>
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="form-check mb-0">
               <input class="form-check-input me-2" type="checkbox" value="" id="rememberMe"/>
-              <label class="form-check-label" for="rememberMe">Remember me</label>
+                            <label class="form-check-label" for="rememberMe"><?php echo t('remember_me'); ?></label>
             </div>
-            <a href="#!" class="text-body">Forgot password?</a>
+                        <a href="#!" class="text-body"><?php echo t('forgot_password'); ?></a>
           </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
             <button type="submit" id="loginBtn" class="btn btn-primary btn-lg w-100 w-md-auto" style="padding-left: 2.5rem; padding-right: 2.5rem;">
-              <span id="loginText">Login</span>
+                            <span id="loginText"><?php echo t('login'); ?></span>
               <span id="loginSpinner" class="spinner-border spinner-border-sm" role="status" style="display:none;"></span>
             </button>
-            <p class="small fw-bold mt-3 pt-1 mb-0 text-center text-md-start">Don't have an tai khoan? <a href="signup.php" class="link-danger">Create tai khoan</a></p>
+                        <p class="small fw-bold mt-3 pt-1 mb-0 text-center text-md-start">Tai khoan se do quan tri vien cap.</p>
           </div>
         </form>
       </div>
@@ -82,7 +94,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     if (typeof AuthManager !== 'undefined' && AuthManager.isAuthenticated()) {
-        window.location.href = 'home.php';
+        try {
+            var userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+            if (parseInt(userData.must_change_password || 0, 10) === 1) {
+                window.location.href = 'force-change-password.php';
+            } else {
+                window.location.href = 'home.php';
+            }
+        } catch (e) {
+            window.location.href = 'home.php';
+        }
     }
 });
 
@@ -91,6 +112,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
+    var secondaryPassword = document.getElementById('secondary_password').value;
     var errorMsg = document.getElementById('error-msg');
     var successMsg = document.getElementById('success-msg');
     var loginBtn = document.getElementById('loginBtn');
@@ -110,7 +132,8 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         contentType: 'application/json',
         data: JSON.stringify({
             email: email,
-            password: password
+            password: password,
+            secondary_password: secondaryPassword
         }),
         dataType: 'json',
         success: function(response) {
@@ -118,20 +141,24 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
                 localStorage.setItem('access_token', response.access_token);
                 localStorage.setItem('user_data', JSON.stringify(response.user));
                 
-                successMsg.textContent = 'Login successful! Redirecting...';
+                successMsg.textContent = <?php echo json_encode(current_lang() === 'vi' ? 'Dang nhap thanh cong! Dang chuyen trang...' : 'Login successful! Redirecting...'); ?>;
                 
                 setTimeout(function() {
-                    window.location.href = 'home.php';
+                    if (response.user && parseInt(response.user.must_change_password || 0, 10) === 1) {
+                        window.location.href = 'force-change-password.php';
+                    } else {
+                        window.location.href = 'home.php';
+                    }
                 }, 500);
             } else {
-                errorMsg.textContent = response.message || 'Invalid credentials';
+                errorMsg.textContent = response.message || <?php echo json_encode(current_lang() === 'vi' ? 'Thong tin dang nhap khong dung' : 'Invalid credentials'); ?>;
                 loginBtn.disabled = false;
                 loginText.style.display = 'inline';
                 loginSpinner.style.display = 'none';
             }
         },
         error: function(xhr) {
-            var message = 'An error occurred. Please try again.';
+            var message = <?php echo json_encode(current_lang() === 'vi' ? 'Da xay ra loi. Vui long thu lai.' : 'An error occurred. Please try again.'); ?>;
             try {
                 var response = JSON.parse(xhr.responseText);
                 message = response.message || message;

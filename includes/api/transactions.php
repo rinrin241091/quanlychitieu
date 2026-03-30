@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -13,7 +13,7 @@ include_once('../database.php');
 include_once('../auth_helper.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $userid = requireAuthentication();
+    requireAdmin($db);
     
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -25,35 +25,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     if ($type === 'expense') {
         $query = "
-            SELECT ID, 'Chi tieu' as Type, Category, Chi tieuCost as Amount, Description, Chi tieuDate as TransactionDate 
-            FROM tblexpense WHERE userid='$userid'
-            ORDER BY TransactionDate DESC
+            SELECT e.ID, 'Expense' as Type, e.Category, e.ExpenseCost as Amount, e.Description, e.ExpenseDate as TransactionDate,
+                   e.UserId, IFNULL(u.name, 'Unknown') AS Author
+            FROM tblexpense e
+            LEFT JOIN users u ON u.id = e.UserId
+            ORDER BY e.ExpenseDate DESC, e.ID DESC
             LIMIT $limit OFFSET $offset
         ";
-        $countQuery = "SELECT COUNT(*) as total FROM tblexpense WHERE userid='$userid'";
+        $countQuery = "SELECT COUNT(*) as total FROM tblexpense";
     } elseif ($type === 'income') {
         $query = "
-            SELECT ID, 'Thu nhap' as Type, Category, Thu nhapAmount as Amount, Description, Thu nhapDate as TransactionDate 
-            FROM tblincome WHERE userid='$userid'
-            ORDER BY TransactionDate DESC
+            SELECT i.ID, 'Income' as Type, i.Category, i.IncomeAmount as Amount, i.Description, i.IncomeDate as TransactionDate,
+                   i.UserId, IFNULL(u.name, 'Unknown') AS Author
+            FROM tblincome i
+            LEFT JOIN users u ON u.id = i.UserId
+            ORDER BY i.IncomeDate DESC, i.ID DESC
             LIMIT $limit OFFSET $offset
         ";
-        $countQuery = "SELECT COUNT(*) as total FROM tblincome WHERE userid='$userid'";
+        $countQuery = "SELECT COUNT(*) as total FROM tblincome";
     } else {
         $query = "
-            SELECT ID, 'Chi tieu' as Type, Category, Chi tieuCost as Amount, Description, Chi tieuDate as TransactionDate 
-            FROM tblexpense WHERE userid='$userid'
+            SELECT e.ID, 'Expense' as Type, e.Category, e.ExpenseCost as Amount, e.Description, e.ExpenseDate as TransactionDate,
+                   e.UserId, IFNULL(u.name, 'Unknown') AS Author
+            FROM tblexpense e
+            LEFT JOIN users u ON u.id = e.UserId
             UNION ALL
-            SELECT ID, 'Thu nhap' as Type, Category, Thu nhapAmount as Amount, Description, Thu nhapDate as TransactionDate 
-            FROM tblincome WHERE userid='$userid'
-            ORDER BY TransactionDate DESC
+            SELECT i.ID, 'Income' as Type, i.Category, i.IncomeAmount as Amount, i.Description, i.IncomeDate as TransactionDate,
+                   i.UserId, IFNULL(u.name, 'Unknown') AS Author
+            FROM tblincome i
+            LEFT JOIN users u ON u.id = i.UserId
+            ORDER BY TransactionDate DESC, ID DESC
             LIMIT $limit OFFSET $offset
         ";
         $countQuery = "
             SELECT COUNT(*) as total FROM (
-                SELECT ID FROM tblexpense WHERE userid='$userid'
+                SELECT ID FROM tblexpense
                 UNION ALL
-                SELECT ID FROM tblincome WHERE userid='$userid'
+                SELECT ID FROM tblincome
             ) as combined_table
         ";
     }
@@ -66,6 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $transactions[] = [
                 'id' => (int)$row['ID'],
                 'type' => $row['Type'],
+                'user_id' => (int)$row['UserId'],
+                'author' => $row['Author'],
                 'category' => $row['Category'],
                 'amount' => (float)$row['Amount'],
                 'description' => $row['Description'],
@@ -96,4 +106,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>
-

@@ -1,0 +1,172 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Minimal artisan-like CLI for this non-Laravel PHP project.
+ * Supports:
+ * - php artisan serve [--host=127.0.0.1] [--port=8000]
+ * - php artisan db:check
+ */
+
+$argv = $_SERVER['argv'] ?? [];
+$command = $argv[1] ?? null;
+
+function parseOption(array $args, string $name, string $default): string
+{
+    foreach ($args as $arg) {
+        if (strpos($arg, "--{$name}=") === 0) {
+            $value = substr($arg, strlen($name) + 3);
+            return $value !== '' ? $value : $default;
+        }
+    }
+
+    return $default;
+}
+
+function printUsage(): void
+{
+    echo "Expense Tracker CLI\n";
+    echo "Usage:\n";
+    echo "  php artisan serve [--host=127.0.0.1] [--port=8000]\n";
+    echo "  php artisan db:check\n";
+}
+
+function loadProjectEnv(): void
+{
+    $envPath = __DIR__ . DIRECTORY_SEPARATOR . '.env';
+    if (!is_file($envPath)) {
+        return;
+    }
+
+    $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if ($lines === false) {
+        return;
+    }
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+
+        $parts = explode('=', $line, 2);
+        if (count($parts) !== 2) {
+            continue;
+        }
+
+        $name = trim($parts[0]);
+        $value = trim($parts[1]);
+        if ($name === '') {
+            continue;
+        }
+
+        if (getenv($name) === false) {
+            putenv("{$name}={$value}");
+            $_ENV[$name] = $value;
+            $_SERVER[$name] = $value;
+        }
+    }
+}
+
+function getDbConfig(): array
+{
+    $databaseUrl = getenv('DATABASE_URL');
+    if ($databaseUrl) {
+        $parsed = parse_url($databaseUrl);
+        return [
+            'host' => $parsed['host'] ?? '127.0.0.1',
+            'port' => isset($parsed['port']) ? (int) $parsed['port'] : 3306,
+            'user' => $parsed['user'] ?? 'root',
+            'pass' => $parsed['pass'] ?? '',
+            'name' => ltrim((string) ($parsed['path'] ?? ''), '/'),
+        ];
+    }
+
+    return [
+        'host' => getenv('DB_HOST') ?: '127.0.0.1',
+        'port' => (int) (getenv('DB_PORT') ?: 3306),
+        'user' => getenv('DB_USER') ?: 'root',
+        'pass' => getenv('DB_PASS') ?: '',
+        'name' => getenv('DB_NAME') ?: 'expenditure',
+    ];
+}
+
+function checkDatabaseConnection(): int
+{
+    loadProjectEnv();
+    $config = getDbConfig();
+
+    if ($config['name'] === '') {
+        fwrite(STDERR, "DB_NAME is empty. Please set it in .env or DATABASE_URL.\n");
+        return 1;
+    }
+
+    if (!extension_loaded('mysqli')) {
+        fwrite(STDERR, "Missing mysqli extension in current PHP runtime.\n");
+        return 1;
+    }
+
+    mysqli_report(MYSQLI_REPORT_OFF);
+    $connection = @new mysqli(
+        $config['host'],
+        $config['user'],
+        $config['pass'],
+        $config['name'],
+        (int) $config['port']
+    );
+
+    if ($connection->connect_error) {
+        fwrite(STDERR, "DB connection failed.\n");
+        fwrite(STDERR, "Host: {$config['host']}  Port: {$config['port']}  DB: {$config['name']}  User: {$config['user']}\n");
+        fwrite(STDERR, "MySQL error: {$connection->connect_error}\n");
+        return 1;
+    }
+
+    echo "DB connection OK.\n";
+    echo "Host: {$config['host']}  Port: {$config['port']}  DB: {$config['name']}  User: {$config['user']}\n";
+    $connection->close();
+    return 0;
+}
+
+if ($command === null || in_array($command, ['-h', '--help', 'help'], true)) {
+    printUsage();
+    exit(0);
+}
+
+if ($command === 'db:check') {
+    exit(checkDatabaseConnection());
+}
+
+if ($command === 'serve') {
+    $host = parseOption($argv, 'host', '127.0.0.1');
+    $port = parseOption($argv, 'port', '8000');
+
+    if (!ctype_digit($port)) {
+        fwrite(STDERR, "Invalid --port value: {$port}\n");
+        exit(1);
+    }
+
+    $docRoot = __DIR__;
+    $server = sprintf('%s:%s', $host, $port);
+
+    $phpBinary = PHP_BINARY ?: 'php';
+    $commandLine = sprintf(
+        '"%s" -S %s -t "%s"',
+        $phpBinary,
+        $server,
+        $docRoot
+    );
+
+    echo "Starting development server at http://{$server}\n";
+    echo "Document root: {$docRoot}\n";
+    echo "Press Ctrl+C to stop.\n\n";
+
+    passthru($commandLine, $exitCode);
+    exit((int) $exitCode);
+}
+
+fwrite(STDERR, "Unknown command: {$command}\n\n");
+printUsage();
+exit(1);

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -32,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ];
     
     if ($reportType === 'expense') {
-        $query = "SELECT e.ID, e.Chi tieuDate as date, c.CategoryName as category, e.Chi tieuCost as amount, e.Description 
+        $query = "SELECT e.ID, e.ExpenseDate as date, c.CategoryName as category, e.ExpenseCost as amount, e.Description 
                   FROM tblexpense e 
                   LEFT JOIN tblcategory c ON e.CategoryId = c.CategoryId 
-                  WHERE e.UserId='$userid' AND e.Chi tieuDate BETWEEN '$startDate' AND '$endDate' 
-                  ORDER BY e.Chi tieuDate DESC";
+                  WHERE e.UserId='$userid' AND e.ExpenseDate BETWEEN '$startDate' AND '$endDate' 
+                  ORDER BY e.ExpenseDate DESC";
         
         $result = mysqli_query($db, $query);
         $data = [];
@@ -60,11 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         ];
         
     } elseif ($reportType === 'income') {
-        $query = "SELECT i.ID, i.Thu nhapDate as date, c.CategoryName as category, i.Thu nhapAmount as amount, i.Description 
+        $query = "SELECT i.ID, i.IncomeDate as date, c.CategoryName as category, i.IncomeAmount as amount, i.Description 
                   FROM tblincome i 
                   LEFT JOIN tblcategory c ON i.CategoryId = c.CategoryId 
-                  WHERE i.UserId='$userid' AND i.Thu nhapDate BETWEEN '$startDate' AND '$endDate' 
-                  ORDER BY i.Thu nhapDate DESC";
+                  WHERE i.UserId='$userid' AND i.IncomeDate BETWEEN '$startDate' AND '$endDate' 
+                  ORDER BY i.IncomeDate DESC";
         
         $result = mysqli_query($db, $query);
         $data = [];
@@ -87,64 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'total_amount' => $totalAmount
         ];
         
-    } elseif ($reportType === 'pending') {
-        $query = "SELECT id, name, date_of_cho vay as date, amount, description, status 
-                  FROM cho vay 
-                  WHERE UserId='$userid' AND status='pending' AND date_of_cho vay BETWEEN '$startDate' AND '$endDate' 
-                  ORDER BY date_of_cho vay DESC";
-        
-        $result = mysqli_query($db, $query);
-        $data = [];
-        $totalAmount = 0;
-        
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = [
-                'id' => (int)$row['id'],
-                'name' => $row['name'],
-                'date' => $row['date'],
-                'amount' => (float)$row['amount'],
-                'description' => $row['description'],
-                'status' => $row['status']
-            ];
-            $totalAmount += (float)$row['amount'];
-        }
-        
-        $response['data'] = $data;
-        $response['summary'] = [
-            'total_records' => count($data),
-            'total_pending' => $totalAmount
-        ];
-        
-    } elseif ($reportType === 'received') {
-        $query = "SELECT id, name, date_of_cho vay as date, amount, description, status 
-                  FROM cho vay 
-                  WHERE UserId='$userid' AND status='received' AND date_of_cho vay BETWEEN '$startDate' AND '$endDate' 
-                  ORDER BY date_of_cho vay DESC";
-        
-        $result = mysqli_query($db, $query);
-        $data = [];
-        $totalAmount = 0;
-        
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = [
-                'id' => (int)$row['id'],
-                'name' => $row['name'],
-                'date' => $row['date'],
-                'amount' => (float)$row['amount'],
-                'description' => $row['description'],
-                'status' => $row['status']
-            ];
-            $totalAmount += (float)$row['amount'];
-        }
-        
-        $response['data'] = $data;
-        $response['summary'] = [
-            'total_records' => count($data),
-            'total_received' => $totalAmount
-        ];
     } else {
         http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Invalid report type. Use: expense, income, pending, or received']);
+        echo json_encode(['status' => 'error', 'message' => 'Invalid report type. Use: expense or income']);
         exit;
     }
     
@@ -154,4 +99,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>
-

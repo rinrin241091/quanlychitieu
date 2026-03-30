@@ -13,7 +13,7 @@ include_once('../database.php');
 include_once('../auth_helper.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userid = requireAuthentication();
+    requireAdmin($db);
 
     $id = $_POST['id'] ?? 0;
     $type = $_POST['type'] ?? '';
@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $stmt = $db->prepare("DELETE FROM $table WHERE ID = ? AND UserId = ?");
-    $stmt->bind_param("ii", $id, $userid);
+    $stmt = $db->prepare("DELETE FROM $table WHERE ID = ?");
+    $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
         echo json_encode(['status' => 'success', 'message' => ucfirst($type) . ' deleted successfully']);

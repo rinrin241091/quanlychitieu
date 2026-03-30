@@ -13,7 +13,7 @@ if (strlen($_SESSION['detsuid']==0)) {
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
-    <!--<title> Responsiive Admin Tong quan | CodingLab </title>-->
+    <!--<title> Responsiive Admin Dashboard | CodingLab </title>-->
     <link rel="stylesheet" href="css/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -40,50 +40,38 @@ if (strlen($_SESSION['detsuid']==0)) {
         <li>
           <a href="home.php" >
             <i class='bx bx-grid-alt' ></i>
-            <span class="links_name">Tong quan</span>
+            <span class="links_name">Dashboard</span>
           </a>
         </li>
         <li>
           <a href="add-expenses.php">
             <i class='bx bx-box' ></i>
-            <span class="links_name">Chi tieu</span>
+            <span class="links_name">Expenses</span>
           </a>
         </li>
          <li>
           <a href="add-income.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Thu nhap</span>
+            <span class="links_name">Income</span>
           </a>
         </li>
         <li>
           <a href="manage-transaction.php">
             <i class='bx bx-list-ul'></i>
-            <span class="links_name">Quan ly giao dich</span>
+            <span class="links_name">Manage List</span>
           </a>
         </li>
         
         <li>
-          <a href="cho vay.php">
-          <i class='bx bx-money'></i>
-            <span class="links_name">cho vay</span>
-          </a>
-        </li>
-        <li>
-        <a href="manage-cho vay.php" >
-        <i class='bx bx-coin-stack'></i>
-            <span class="links_name">Quan ly cho vay</span>
-          </a>
-        </li>
-        <li>
           <a href="analytics.php">
             <i class='bx bx-pie-chart-alt-2' ></i>
-            <span class="links_name">Phan tich</span>
+            <span class="links_name">Analytics</span>
           </a>
         </li>
         <li>
           <a href="report.php" class="active">
           <i class="bx bx-file"></i>
-            <span class="links_name">Bao cao</span>
+            <span class="links_name">Report</span>
           </a>
         </li>
        <li>
@@ -108,7 +96,7 @@ if (strlen($_SESSION['detsuid']==0)) {
       </div>
    
       <div class="search-box">
-        <input input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Tim kiem...">
+        <input input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Search...">
         <i class='bx bx-search' ></i>
 </div>
 <script>
@@ -172,7 +160,7 @@ $name=$row['name'];
     </nav>
 
 <script>
-function printBao cao() {
+function printReport() {
   // Remove the form submit event to prevent redirection
   $('#filter-form').off('submit');
   
@@ -214,7 +202,7 @@ var currentDate = new Date().toISOString().slice(0,10);
 
 // Print the report with the current date in the title
 var nw = window.open('', '_blank', 'width=900,height=600');
-nw.document.write('<html><head><title>Chi tieu Bao cao - ' + currentDate + '</title></head><body>');
+nw.document.write('<html><head><title>Expense Report - ' + currentDate + '</title></head><body>');
   nw.document.write('<style>table {border-collapse: collapse; border-spacing: 0;} td, th {border: 1px solid black; padding: 5px;}</style>');
   nw.document.write(printableContent.html());
   nw.document.write('</body></html>');
@@ -248,19 +236,19 @@ $rtype = $_GET['reportType'];
         <div class="card-header">
           <div class="row">
             <div class="col-md-6">
-              <h4 class="card-title">Chi tieu Bao cao</h4>
+              <h4 class="card-title">Expense Report</h4>
             </div>
             <div class="col-md-6 text-right">
-              <button class="btn btn-primary" onclick="printBao cao()">Print</button>
+              <button class="btn btn-primary" onclick="printReport()">Print</button>
             </div>
           </div>
         </div>
         <div class="card-body" id="printable">
-          <h5 align="center" style="color:blue">Datewise <?php echo ucfirst($rtype); ?> Bao cao from <span style="color:red"><?php echo $fdate ?></span> to <span style="color:red"><?php echo $tdate ?></span></h5>
+          <h5 align="center" style="color:blue">Datewise <?php echo ucfirst($rtype); ?> Report from <span style="color:red"><?php echo $fdate ?></span> to <span style="color:red"><?php echo $tdate ?></span></h5>
           <hr />
           <?php
           $userid=$_SESSION['detsuid'];
-          $ret=mysqli_query($db,"SELECT Chi tieuDate,category,Description,NoteDate,SUM(Chi tieuCost) as totaldaily FROM `tblexpense`  where (Chi tieuDate BETWEEN '$fdate' and '$tdate') && (UserId='$userid') group by Chi tieuDate, category");
+          $ret=mysqli_query($db,"SELECT ExpenseDate,category,Description,NoteDate,SUM(ExpenseCost) as totaldaily FROM `tblexpense`  where (ExpenseDate BETWEEN '$fdate' and '$tdate') && (UserId='$userid') group by ExpenseDate, category");
           if(mysqli_num_rows($ret) > 0) {
           ?>
           <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -282,7 +270,7 @@ $rtype = $_GET['reportType'];
               ?>
               <tr>
                 <td><?php echo $cnt;?></td>
-                <td><?php  echo $row['Chi tieuDate'];?></td>
+                <td><?php  echo $row['ExpenseDate'];?></td>
                 <td><?php  echo $row['category'];?></td>
                 <td><?php  echo $row['Description'];?></td>
                 <td><?php  echo $row['NoteDate'];?></td>

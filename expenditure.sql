@@ -191,7 +191,11 @@ CREATE TABLE `users` (
   `email` varchar(30) NOT NULL,
   `phone` varchar(15) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `secondary_password` varchar(255) DEFAULT NULL,
   `verification_code` varchar(32) NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT 0,
+  `must_change_password` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -199,8 +203,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`, `verification_code`, `created_at`) VALUES
-(68, 'User', 'user@gmail.com', '9042967143', '$2y$10$JkvQ00olAxMBVQBUJ6kZp.rNtv0v5K7OChUeVvR04uAq8ZEFWDC2.', '4ebebb3c3d07', '2023-04-12 10:31:16');
+INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`, `secondary_password`, `verification_code`, `is_admin`, `must_change_password`, `created_at`) VALUES
+(68, 'User', 'user@gmail.com', '9042967143', '$2y$10$JkvQ00olAxMBVQBUJ6kZp.rNtv0v5K7OChUeVvR04uAq8ZEFWDC2.', NULL, '4ebebb3c3d07', 1, 0, '2023-04-12 10:31:16');
 
 --
 -- Indexes for dumped tables

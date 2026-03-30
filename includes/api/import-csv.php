@@ -53,7 +53,7 @@ function isValidDate($date) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userid = requireAuthentication();
+    $userid = requireAdmin($db);
 
     if (!isset($_FILES['csv_file']) && !isset($_FILES['csv-file'])) {
         echo json_encode(['status' => 'error', 'message' => 'No file uploaded or upload error']);

@@ -1,4 +1,4 @@
-﻿<head>
+<head>
 <?php include "includes/header.php" ?>
 
 </head>
@@ -10,20 +10,20 @@
         <div class="grid-cols-2">
           <div class="grid-item-1">
             <h1 class="main-heading">
-              Chao mung den <span>Expenditure.</span>
+              <?php echo t('welcome_title'); ?> <span><?php echo t('brand'); ?></span>
               <br />
-              To Analysis yourÂ spend.
+              <?php echo t('welcome_subtitle'); ?>
             </h1>
             <p class="info-text">
-            Start tracking your daily expenses from any corner ofÂ theÂ world.
+            <?php echo t('welcome_desc'); ?>
             </p>
 
             <div class="btn_wrapper">
              <a href="includes/index.php" button class="btn view_more_btn">
-               Bat dau ngay<i class="ri-arrow-right-line"></i>
+               <?php echo t('start_now'); ?><i class="ri-arrow-right-line"></i>
               </button></a>
 <a href ="includes/signup.php">
-              <button class="btn documentation_btn">Dang ky</button>
+              <button class="btn documentation_btn"><?php echo t('sign_up'); ?></button>
 </a>
             </div>
           </div>

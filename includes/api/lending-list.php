@@ -1,5 +1,9 @@
 ﻿<?php
 header('Content-Type: application/json');
+http_response_code(410);
+echo json_encode(['status' => 'error', 'message' => 'Lending feature has been removed']);
+exit;
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');

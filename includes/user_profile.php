@@ -3,9 +3,11 @@
 session_start();
 error_reporting(0);
 include('database.php');
+include_once('auth_helper.php');
 if (empty($_SESSION['detsuid'])) {
   header('location:logout.php');
-  } else{
+	exit;
+}
 ?>
   
   <!DOCTYPE html>
@@ -13,7 +15,7 @@ if (empty($_SESSION['detsuid'])) {
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
-    <!--<title> Responsiive Admin Tong quan | CodingLab </title>-->
+    <!--<title> Responsiive Admin Dashboard | CodingLab </title>-->
     <link rel="stylesheet" href="css/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -33,58 +35,46 @@ if (empty($_SESSION['detsuid'])) {
    </head>
 <body>
   <div class="sidebar">
-    <div class="logo-details">
+		<div class="logo-details">
       <i class='bx bx-album'></i>
       <span class="logo_name">Expenditure</span>
     </div>
-      <ul class="nav-links">
+		<ul class="nav-links">
         <li>
           <a href="home.php">
             <i class='bx bx-grid-alt' ></i>
-            <span class="links_name">Tong quan</span>
+            <span class="links_name">Dashboard</span>
           </a>
         </li>
         <li>
           <a href="add-expenses.php">
             <i class='bx bx-box' ></i>
-            <span class="links_name">Chi tieu</span>
+            <span class="links_name">Expenses</span>
           </a>
         </li>
        <li>
           <a href="add-income.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Thu nhap</span>
+            <span class="links_name">Income</span>
           </a>
         </li>
         <li>
           <a href="manage-transaction.php">
             <i class='bx bx-list-ul'></i>
-            <span class="links_name">Quan ly giao dich</span>
+            <span class="links_name">Manage List</span>
           </a>
         </li>
         
         <li>
-          <a href="cho vay.php">
-          <i class='bx bx-money'></i>
-            <span class="links_name">cho vay</span>
-          </a>
-        </li>
-        <li>
-        <a href="manage-cho vay.php" >
-        <i class='bx bx-coin-stack'></i>
-            <span class="links_name">Quan ly cho vay</span>
-          </a>
-        </li>
-        <li>
           <a href="analytics.php">
             <i class='bx bx-pie-chart-alt-2' ></i>
-            <span class="links_name">Phan tich</span>
+            <span class="links_name">Analytics</span>
           </a>
         </li>
         <li>
           <a href="report.php">
           <i class="bx bx-file"></i>
-            <span class="links_name">Bao cao</span>
+            <span class="links_name">Report</span>
           </a>
         </li>
        <li>
@@ -99,7 +89,7 @@ if (empty($_SESSION['detsuid'])) {
             <span class="links_name">Log out</span>
           </a>
         </li>
-      </ul>
+		</ul>
   </div>
   <section class="home-section">
     <nav>
@@ -112,14 +102,15 @@ if (empty($_SESSION['detsuid'])) {
 
       <?php
 $uid=$_SESSION['detsuid'];
-$ret=mysqli_query($db,"select name  from users where id='$uid'");
+$ret=mysqli_query($db,"select name, IFNULL(avatar, '') AS avatar from users where id='$uid'");
 $row=mysqli_fetch_array($ret);
 $name=$row['name'];
+$avatar = !empty($row['avatar']) ? $row['avatar'] : 'images/maex.png';
 
 ?>
 
       <div class="profile-details">
-  <img src="images/maex.png" alt="">
+	<img src="<?php echo htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8'); ?>" alt="">
   <span class="admin_name"><?php echo $name; ?></span>
   <i class='bx bx-chevron-down' id='profile-options-toggle'></i>
   <ul class="profile-options" id='profile-options'>
@@ -177,18 +168,18 @@ if (mysqli_num_rows($result) > 0) {
 	<center>
     <label for="profile-image-input">
       <div class="img-circle text-center mb-3">
-        <img id="profile-image-preview" src="images/maex.png" alt="Image" class="shadow">
+		<img id="profile-image-preview" src="<?php echo htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8'); ?>" alt="Image" class="shadow">
         <div class="overlay">
 		<i class="fas fa-camera fa-lg text" style="color: white;"></i>
         </div>
       </div>
     </label>
 	</center>
-    <input type="file" id="profile-image-input" style="display: none;">
+	<input type="file" id="profile-image-input" name="avatar" form="profile-settings-form" accept="image/*" style="display: none;">
     <h4 class="text-center"><?php echo $name; ?></h4>
   </div>
 					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-						<a class="nav-link active" id="tai khoan-tab" data-toggle="pill" href="#tai khoan" role="tab" aria-controls="tai khoan" aria-selected="true">
+						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
 							<i class="fa fa-home text-center mr-1"></i> 
 							Account
 						</a>
@@ -196,6 +187,10 @@ if (mysqli_num_rows($result) > 0) {
 							<i class="fa fa-key text-center mr-1"></i> 
 							Password
 						</a> 
+							<a class="nav-link" id="display-tab" data-toggle="pill" href="#display" role="tab" aria-controls="display" aria-selected="false">
+								<i class="fa fa-adjust text-center mr-1"></i>
+								Display & Accessibility
+							</a>
 						 <!-- <a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
 							<i class="fa fa-user text-center mr-1"></i> 
 							Security
@@ -211,9 +206,9 @@ if (mysqli_num_rows($result) > 0) {
 					</div>
 				</div>
 				<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
-					<div class="tab-pane fade show active" id="tai khoan" role="tabpanel" aria-labelledby="tai khoan-tab">
+					<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
 						<h3 class="mb-4">Account Settings</h3>
-						<form method="POST" action="update_user.php">
+						<form id="profile-settings-form" method="POST" action="update_user.php" enctype="multipart/form-data">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -360,6 +355,44 @@ if (isset($_POST['submit'])) {
             <button class="btn btn-light" type="reset">Cancel</button>
         </div>
     </form>
+</div>
+
+<div class="tab-pane fade" id="display" role="tabpanel" aria-labelledby="display-tab">
+	<h3 class="mb-4">Display & Accessibility</h3>
+
+	<div class="display-setting-item mb-4">
+		<h5 class="mb-1">Dark mode</h5>
+		<p class="text-muted mb-3">Adjust UI to reduce glare and make viewing more comfortable.</p>
+		<div class="custom-control custom-radio">
+			<input type="radio" id="theme-off" name="theme-mode" value="off" class="custom-control-input" checked>
+			<label class="custom-control-label" for="theme-off">Off</label>
+		</div>
+		<div class="custom-control custom-radio mt-2">
+			<input type="radio" id="theme-on" name="theme-mode" value="on" class="custom-control-input">
+			<label class="custom-control-label" for="theme-on">On</label>
+		</div>
+		<div class="custom-control custom-radio mt-2">
+			<input type="radio" id="theme-auto" name="theme-mode" value="auto" class="custom-control-input">
+			<label class="custom-control-label" for="theme-auto">Auto</label>
+		</div>
+	</div>
+
+	<div class="display-setting-item mb-4">
+		<h5 class="mb-1">Compact mode</h5>
+		<p class="text-muted mb-3">Reduce font size and spacing to fit more content.</p>
+		<div class="custom-control custom-radio">
+			<input type="radio" id="compact-off" name="compact-mode" value="off" class="custom-control-input" checked>
+			<label class="custom-control-label" for="compact-off">Off</label>
+		</div>
+		<div class="custom-control custom-radio mt-2">
+			<input type="radio" id="compact-on" name="compact-mode" value="on" class="custom-control-input">
+			<label class="custom-control-label" for="compact-on">On</label>
+		</div>
+	</div>
+
+	<div>
+		<button class="btn btn-primary" type="button" id="save-display-settings">Save display settings</button>
+	</div>
 </div>
 
 		</div>
@@ -595,9 +628,124 @@ sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
 }else
 sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
 }
+
+function initDisplaySettingsTab() {
+	if (typeof AuthManager === 'undefined') {
+		return;
+	}
+
+	var prefs = AuthManager.getDisplayPreferences();
+	var themeValue = prefs.theme || 'off';
+	var compactValue = prefs.compact ? 'on' : 'off';
+
+	var themeInput = document.querySelector('input[name="theme-mode"][value="' + themeValue + '"]');
+	if (themeInput) {
+		themeInput.checked = true;
+	}
+
+	var compactInput = document.querySelector('input[name="compact-mode"][value="' + compactValue + '"]');
+	if (compactInput) {
+		compactInput.checked = true;
+	}
+
+	var saveBtn = document.getElementById('save-display-settings');
+	if (!saveBtn) {
+		return;
+	}
+
+	saveBtn.addEventListener('click', function() {
+		var selectedTheme = (document.querySelector('input[name="theme-mode"]:checked') || {}).value || 'off';
+		var selectedCompact = (document.querySelector('input[name="compact-mode"]:checked') || {}).value || 'off';
+
+		var updatedPrefs = AuthManager.setDisplayPreferences({
+			theme: selectedTheme,
+			compact: selectedCompact === 'on'
+		});
+
+		AuthManager.applyDisplayPreferences(updatedPrefs);
+		alert('Display settings updated successfully');
+	});
+}
+
+function initAvatarCropUpload() {
+	var avatarInput = document.getElementById('profile-image-input');
+	var avatarPreview = document.getElementById('profile-image-preview');
+	if (!avatarInput || !avatarPreview) {
+		return;
+	}
+
+	function cropToSquare(file, size) {
+		return new Promise(function(resolve, reject) {
+			var imageUrl = URL.createObjectURL(file);
+			var img = new Image();
+			img.onload = function() {
+				try {
+					var side = Math.min(img.width, img.height);
+					var sx = Math.floor((img.width - side) / 2);
+					var sy = Math.floor((img.height - side) / 2);
+
+					var canvas = document.createElement('canvas');
+					canvas.width = size;
+					canvas.height = size;
+					var ctx = canvas.getContext('2d');
+					ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+
+					canvas.toBlob(function(blob) {
+						URL.revokeObjectURL(imageUrl);
+						if (!blob) {
+							reject(new Error('Crop failed'));
+							return;
+						}
+
+						var cropped = new File([blob], 'avatar_' + Date.now() + '.png', { type: 'image/png' });
+						resolve(cropped);
+					}, 'image/png');
+				} catch (err) {
+					URL.revokeObjectURL(imageUrl);
+					reject(err);
+				}
+			};
+			img.onerror = function() {
+				URL.revokeObjectURL(imageUrl);
+				reject(new Error('Invalid image'));
+			};
+			img.src = imageUrl;
+		});
+	}
+
+	avatarInput.addEventListener('change', async function() {
+		var file = this.files && this.files[0] ? this.files[0] : null;
+		if (!file) {
+			return;
+		}
+
+		if (!file.type || file.type.indexOf('image/') !== 0) {
+			alert('Vui lòng chọn đúng tệp hình ảnh.');
+			this.value = '';
+			return;
+		}
+
+		try {
+			var croppedFile = await cropToSquare(file, 300);
+			var dt = new DataTransfer();
+			dt.items.add(croppedFile);
+			avatarInput.files = dt.files;
+
+			var previewUrl = URL.createObjectURL(croppedFile);
+			avatarPreview.src = previewUrl;
+			setTimeout(function() {
+				URL.revokeObjectURL(previewUrl);
+			}, 2000);
+		} catch (e) {
+			alert('Khong the xu ly anh avatar. Vui long thu lai voi anh khac.');
+			this.value = '';
+		}
+	});
+}
+
+initDisplaySettingsTab();
+initAvatarCropUpload();
 </script>
 
 </body>
 </html>
-
-<?php } ?>

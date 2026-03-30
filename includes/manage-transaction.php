@@ -2,7 +2,13 @@
 session_start();
 error_reporting(0);
 include('database.php');
+include_once('auth_helper.php');
 $sessionValid = !empty($_SESSION['detsuid']);
+
+if (empty($_SESSION['detsuid']) || !userHasAdminPrivilege($db, (int)$_SESSION['detsuid'])) {
+    header('location:home.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -30,14 +36,12 @@ $sessionValid = !empty($_SESSION['detsuid']);
 <div class="sidebar">
     <div class="logo-details"><i class='bx bx-album'></i><span class="logo_name">Expenditure</span></div>
     <ul class="nav-links">
-        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Tong quan</span></a></li>
-        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Chi tieu</span></a></li>
-        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Thu nhap</span></a></li>
-        <li><a href="manage-transaction.php" class="active"><i class='bx bx-list-ul'></i><span class="links_name">Quan ly giao dich</span></a></li>
-        <li><a href="cho vay.php"><i class='bx bx-money'></i><span class="links_name">cho vay</span></a></li>
-        <li><a href="manage-cho vay.php"><i class='bx bx-coin-stack'></i><span class="links_name">Quan ly cho vay</span></a></li>
-        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Phan tich</span></a></li>
-        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Bao cao</span></a></li>
+        <li><a href="home.php"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a></li>
+        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Expenses</span></a></li>
+        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Income</span></a></li>
+        <li><a href="manage-transaction.php" class="active"><i class='bx bx-list-ul'></i><span class="links_name">Manage List</span></a></li>
+        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Analytics</span></a></li>
+        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Report</span></a></li>
         <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name">Setting</span></a></li>
         <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
     </ul>
@@ -47,7 +51,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
     <nav>
         <div class="sidebar-button"><i class='bx bx-menu sidebarBtn'></i><span class="dashboard">Expenditure</span></div>
         <div class="search-box">
-            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Tim kiem...">
+            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Search...">
             <i class='bx bx-search'></i>
         </div>
         <div class="profile-details">
@@ -85,8 +89,8 @@ $sessionValid = !empty($_SESSION['detsuid']);
                                             </label>
                                             <select class="form-control-sm ml-2" id="type-filter">
                                                 <option value="all">All</option>
-                                                <option value="expense">Chi tieu</option>
-                                                <option value="income">Thu nhap</option>
+                                                <option value="expense">Expenses</option>
+                                                <option value="income">Income</option>
                                             </select>
                                         </div>
                                     </div>
@@ -99,15 +103,16 @@ $sessionValid = !empty($_SESSION['detsuid']);
                                                     <tr>
                                                         <th width="5%">#</th>
                                                         <th width="10%">Type</th>
+                                                        <th width="12%">Author</th>
                                                         <th width="15%">Category</th>
                                                         <th width="15%">Amount</th>
-                                                        <th width="25%">Description</th>
+                                                        <th width="20%">Description</th>
                                                         <th width="15%">Date</th>
                                                         <th width="15%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="transactions-tbody">
-                                                    <tr><td colspan="7" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                                                    <tr><td colspan="8" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -132,7 +137,7 @@ $sessionValid = !empty($_SESSION['detsuid']);
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-info"><strong>CSV Format:</strong> Date, Particulars, Chi tieu, Thu nhap, Category, Is_Cho vay</div>
+                    <div class="alert alert-info"><strong>CSV Format:</strong> Date, Particulars, Expense, Income, Category, Is_Lending</div>
                     <div class="form-group">
                         <label for="csv-file">Select CSV File</label>
                         <input type="file" class="form-control-file" id="csv-file" name="csv-file" accept=".csv" required>
@@ -174,7 +179,7 @@ function loadTransactions() {
             if (response.status === 'success') {
                 renderTransactions(response.data.transactions, response.data.pagination);
             } else {
-                $('#transactions-tbody').html('<tr><td colspan="7" class="text-center text-danger">' + response.message + '</td></tr>');
+                $('#transactions-tbody').html('<tr><td colspan="8" class="text-center text-danger">' + response.message + '</td></tr>');
             }
         },
         error: function(xhr) {
@@ -182,7 +187,7 @@ function loadTransactions() {
                 localStorage.removeItem('access_token');
                 window.location.href = 'index.php';
             } else {
-                $('#transactions-tbody').html('<tr><td colspan="7" class="text-center text-danger">Error loading transactions</td></tr>');
+                $('#transactions-tbody').html('<tr><td colspan="8" class="text-center text-danger">Error loading transactions</td></tr>');
             }
         }
     });
@@ -190,7 +195,7 @@ function loadTransactions() {
 
 function renderTransactions(transactions, pagination) {
     if (transactions.length === 0) {
-        $('#transactions-tbody').html('<tr><td colspan="7" class="text-center">No transactions found</td></tr>');
+        $('#transactions-tbody').html('<tr><td colspan="8" class="text-center">No transactions found</td></tr>');
         $('#pagination').html('');
         return;
     }
@@ -199,15 +204,20 @@ function renderTransactions(transactions, pagination) {
     var startIdx = (pagination.current_page - 1) * pagination.limit + 1;
     
     transactions.forEach(function(item, index) {
-        var badgeClass = item.type === 'Thu nhap' ? 'badge-success' : 'badge-danger';
+        var badgeClass = item.type === 'Income' ? 'badge-success' : 'badge-danger';
+        var encodedDescription = encodeURIComponent(item.description || '');
         html += '<tr>' +
             '<td>' + (startIdx + index) + '</td>' +
             '<td><span class="badge ' + badgeClass + '">' + item.type + '</span></td>' +
+            '<td>' + (item.author || '-') + '</td>' +
             '<td>' + (item.category || '-') + '</td>' +
             '<td>' + item.amount + '</td>' +
             '<td>' + (item.description || '-') + '</td>' +
             '<td>' + item.date + '</td>' +
-            '<td><button class="btn btn-sm btn-danger delete-btn" data-id="' + item.id + '" data-type="' + item.type + '"><i class="fas fa-trash-alt"></i> Delete</button></td>' +
+            '<td>' +
+                '<button class="btn btn-sm btn-primary edit-desc-btn mr-1" data-id="' + item.id + '" data-type="' + item.type + '" data-description="' + encodedDescription + '"><i class="fas fa-edit"></i> Edit</button>' +
+                '<button class="btn btn-sm btn-danger delete-btn" data-id="' + item.id + '" data-type="' + item.type + '"><i class="fas fa-trash-alt"></i> Delete</button>' +
+            '</td>' +
         '</tr>';
     });
     
@@ -280,6 +290,56 @@ $(document).ready(function() {
             });
         }
     });
+
+    $(document).on('click', '.edit-desc-btn', function() {
+        var id = $(this).data('id');
+        var type = $(this).data('type');
+        var encodedDescription = $(this).attr('data-description') || '';
+        var description = '';
+
+        try {
+            description = decodeURIComponent(encodedDescription);
+        } catch (e) {
+            description = encodedDescription;
+        }
+
+        $('#edit-desc-transaction-id').val(id);
+        $('#edit-desc-transaction-type').val(type);
+        $('#edit-desc-text').val(description);
+        $('#edit-desc-modal-title').text('Edit Description - ' + type);
+        $('#edit-desc-modal').modal('show');
+    });
+
+    $('#edit-desc-form').on('submit', function(e) {
+        e.preventDefault();
+
+        var id = $('#edit-desc-transaction-id').val();
+        var type = $('#edit-desc-transaction-type').val();
+        var description = $('#edit-desc-text').val();
+
+        $.ajax({
+            url: 'api/update-transaction-description.php',
+            type: 'POST',
+            data: {
+                id: id,
+                type: type,
+                description: description
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    alert(response.message || 'Description updated successfully');
+                    $('#edit-desc-modal').modal('hide');
+                    loadTransactions();
+                } else {
+                    alert(response.message || 'Failed to update description');
+                }
+            },
+            error: function() {
+                alert('An error occurred while updating the description.');
+            }
+        });
+    });
     
     $('#search-input').on('keyup', function() {
         var value = $(this).val().toLowerCase();
@@ -329,6 +389,30 @@ const toggleButton = document.getElementById('profile-options-toggle');
 const profileOptions = document.getElementById('profile-options');
 toggleButton.addEventListener('click', () => { profileOptions.classList.toggle('show'); });
 </script>
+
+<div class="modal fade" id="edit-desc-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="edit-desc-form">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-desc-modal-title">Edit Description</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit-desc-transaction-id">
+                    <input type="hidden" id="edit-desc-transaction-type">
+                    <div class="form-group mb-0">
+                        <label for="edit-desc-text">Description</label>
+                        <textarea class="form-control" id="edit-desc-text" rows="4" placeholder="Enter detailed description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-

@@ -152,25 +152,21 @@ nav .search-box .bx-search{
   border: 2px solid #EFEEF1;
   border-radius: 6px;
   height: 50px;
-  min-width: 190px;
-  padding: 0 15px 0 2px;
+  min-width: 58px;
+  padding: 0 6px;
+  justify-content: center;
 }
 nav .profile-details img{
   height: 40px;
   width: 40px;
-  border-radius: 6px;
+  border-radius: 50%;
   object-fit: cover;
 }
 nav .profile-details .admin_name{
-  font-size: 15px;
-  font-weight: 500;
-  color: #333;
-  margin: 0 10px;
-  white-space: nowrap;
+  display: none !important;
 }
 nav .profile-details i{
-  font-size: 25px;
-  color: #333;
+  display: none !important;
 }
 
 
@@ -220,6 +216,79 @@ nav .profile-options li a:hover {
 nav .profile-options li a i {
   margin-right: 10px;
   font-size: 18px;
+}
+
+/* Facebook-like profile dropdown */
+nav .profile-options.profile-options-fb {
+  min-width: 290px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid #e4e7eb;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  right: 0 !important;
+  margin-top: 10px;
+}
+
+nav .profile-options.profile-options-fb li {
+  border-bottom: none;
+  margin: 4px 0;
+}
+
+nav .profile-options.profile-options-fb .profile-menu-header {
+  margin: 0 0 8px 0;
+  padding: 8px;
+  border-radius: 10px;
+  background: #f3f5f7;
+}
+
+nav .profile-options.profile-options-fb .profile-menu-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+nav .profile-options.profile-options-fb .profile-menu-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+nav .profile-options.profile-options-fb .profile-menu-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+nav .profile-options.profile-options-fb .profile-menu-link {
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 14px;
+}
+
+nav .profile-options.profile-options-fb .profile-menu-link:hover {
+  background: #edf1f5;
+}
+
+body.theme-dark nav .profile-options.profile-options-fb {
+  background: #242526 !important;
+  border-color: #3a3b3c !important;
+}
+
+body.theme-dark nav .profile-options.profile-options-fb .profile-menu-header {
+  background: #2f3031 !important;
+}
+
+body.theme-dark nav .profile-options.profile-options-fb .profile-menu-name,
+body.theme-dark nav .profile-options.profile-options-fb .profile-menu-link {
+  color: #e4e6eb !important;
+}
+
+body.theme-dark nav .profile-options.profile-options-fb .profile-menu-link:hover {
+  background: #3a3b3c !important;
 }
 
 .home-section .home-content{
@@ -517,6 +586,138 @@ nav .profile-options li a i {
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.3s ease;
+}
+
+/* Display and accessibility preferences */
+body.theme-dark {
+  background: #18191a !important;
+  color: #e4e6eb;
+}
+
+body.theme-dark .home-section {
+  background: #18191a;
+}
+
+body.theme-dark .home-section nav,
+body.theme-dark .card,
+body.theme-dark .card-header,
+body.theme-dark .bg-white,
+body.theme-dark .profile-details,
+body.theme-dark .table,
+body.theme-dark .modal-content,
+body.theme-dark .form-control,
+body.theme-dark .form-select,
+body.theme-dark .list-group-item {
+  background-color: #242526 !important;
+  color: #e4e6eb !important;
+  border-color: #3a3b3c !important;
+}
+
+body.theme-dark .home-section nav .search-box input,
+body.theme-dark .nav-pills a.nav-link {
+  background-color: #3a3b3c !important;
+  color: #e4e6eb !important;
+  border-color: #4e4f50 !important;
+}
+
+body.theme-dark .overview-boxes .box,
+body.theme-dark .card1,
+body.theme-dark .card-body,
+body.theme-dark .table,
+body.theme-dark .table td,
+body.theme-dark .table th,
+body.theme-dark .table tbody tr,
+body.theme-dark .tab-content,
+body.theme-dark .profile-tab-nav,
+body.theme-dark .profile-tab-nav .nav,
+body.theme-dark .profile-tab-nav .p-4 {
+  background-color: #242526 !important;
+  border-color: #3a3b3c !important;
+}
+
+body.theme-dark .table thead th {
+  background: #2d2f31 !important;
+  color: #f1f2f4 !important;
+}
+
+body.theme-dark .table tbody tr:hover {
+  background-color: #2d3136 !important;
+}
+
+body.theme-dark .overview-boxes .box-topic,
+body.theme-dark .home-content .box .number,
+body.theme-dark .home-content .box .indicator .text,
+body.theme-dark label,
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5,
+body.theme-dark h6,
+body.theme-dark p,
+body.theme-dark td,
+body.theme-dark th,
+body.theme-dark .text-muted,
+body.theme-dark .card-title,
+body.theme-dark .links_name,
+body.theme-dark .dashboard,
+body.theme-dark .admin_name {
+  color: #e4e6eb !important;
+}
+
+body.theme-dark .card-header,
+body.theme-dark .card1 .card-header {
+  background: #2d2f31 !important;
+  border-bottom-color: #3a3b3c !important;
+}
+
+body.theme-dark .home-content .box .indicator i {
+  background: #2f8f83;
+}
+
+body.theme-dark .profile-details,
+body.theme-dark nav .profile-options,
+body.theme-dark nav .profile-options li a {
+  background-color: #2d2f31 !important;
+  border-color: #3a3b3c !important;
+  color: #e4e6eb !important;
+}
+
+body.theme-dark .profile-tab-nav .nav-pills .nav-link.active {
+  background-color: #1877f2 !important;
+  color: #fff !important;
+}
+
+body.theme-dark #add-button {
+  background-color: #1877f2;
+}
+
+body.theme-dark #add-button:hover {
+  background-color: #0f5cc0;
+}
+
+body.compact-ui {
+  font-size: 14px;
+}
+
+body.compact-ui .sidebar .nav-links li {
+  height: 42px;
+}
+
+body.compact-ui .home-section nav {
+  height: 68px;
+}
+
+body.compact-ui .home-section .home-content {
+  padding-top: 88px;
+}
+
+body.compact-ui .btn,
+body.compact-ui .form-control,
+body.compact-ui .form-select,
+body.compact-ui .table td,
+body.compact-ui .table th {
+  font-size: 13px;
 }
 
 .btn:hover {

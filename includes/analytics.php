@@ -2,9 +2,11 @@
 session_start();
 error_reporting(0);
 include('database.php');
+include_once('auth_helper.php');
 if (empty($_SESSION['detsuid'])) {
   header('location:logout.php');
 } else {
+  $isAdminView = userHasAdminPrivilege($db, (int)$_SESSION['detsuid']);
 ?>
 
   <!DOCTYPE html>
@@ -13,7 +15,7 @@ if (empty($_SESSION['detsuid'])) {
 
   <head>
     <meta charset="UTF-8">
-    <!--<title> Responsiive Admin Tong quan | CodingLab </title>-->
+    <!--<title> Responsiive Admin Dashboard | CodingLab </title>-->
     <link rel="stylesheet" href="css/style.css">
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -43,50 +45,38 @@ if (empty($_SESSION['detsuid'])) {
         <li>
           <a href="home.php">
             <i class='bx bx-grid-alt'></i>
-            <span class="links_name">Tong quan</span>
+            <span class="links_name">Dashboard</span>
           </a>
         </li>
         <li>
           <a href="add-expenses.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Chi tieu</span>
+            <span class="links_name">Expenses</span>
           </a>
         </li>
         <li>
           <a href="add-income.php">
             <i class='bx bx-box'></i>
-            <span class="links_name">Thu nhap</span>
+            <span class="links_name">Income</span>
           </a>
         </li>
         <li>
           <a href="manage-transaction.php">
             <i class='bx bx-list-ul'></i>
-            <span class="links_name">Quan ly giao dich</span>
+            <span class="links_name">Manage List</span>
           </a>
         </li>
 
         <li>
-          <a href="cho vay.php">
-            <i class='bx bx-money'></i>
-            <span class="links_name">cho vay</span>
-          </a>
-        </li>
-        <li>
-          <a href="manage-cho vay.php">
-            <i class='bx bx-coin-stack'></i>
-            <span class="links_name">Quan ly cho vay</span>
-          </a>
-        </li>
-        <li>
           <a href="analytics.php" class="active">
             <i class='bx bx-pie-chart-alt-2'></i>
-            <span class="links_name">Phan tich</span>
+            <span class="links_name">Analytics</span>
           </a>
         </li>
         <li>
           <a href="report.php">
             <i class="bx bx-file"></i>
-            <span class="links_name">Bao cao</span>
+            <span class="links_name">Report</span>
           </a>
         </li>
         <li>
@@ -150,7 +140,7 @@ if (empty($_SESSION['detsuid'])) {
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Phan tich</h5>
+                <h5 class="card-title">Analytics</h5>
 
               </div>
               <div class="card-body">
@@ -159,6 +149,18 @@ if (empty($_SESSION['detsuid'])) {
 
 
             </div>
+
+            <?php if ($isAdminView) { ?>
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="card-title">Monthly Expense Comparison by User (Last 30 Days)</h5>
+              </div>
+              <div class="card-body">
+                <canvas id="monthlyUserChart" style="width: 100%; height: 420px;"></canvas>
+                <div id="monthly-user-no-data" style="display:none;" class="text-muted">No monthly user expense data found.</div>
+              </div>
+            </div>
+            <?php } ?>
           </div>
         </div>
 
@@ -248,6 +250,85 @@ if (empty($_SESSION['detsuid'])) {
               }]
             });
           });
+
+        <?php if ($isAdminView) { ?>
+        fetch('api/monthly-user-expense.php')
+          .then(response => response.json())
+          .then(payload => {
+            if (!payload || payload.status !== 'success' || !Array.isArray(payload.data) || payload.data.length === 0) {
+              const noData = document.getElementById('monthly-user-no-data');
+              const chartCanvas = document.getElementById('monthlyUserChart');
+              if (noData) noData.style.display = 'block';
+              if (chartCanvas) chartCanvas.style.display = 'none';
+              return;
+            }
+
+            const labels = payload.data.map(item => item.name || 'Unknown');
+            const values = payload.data.map(item => Number(item.total_expense || 0));
+            const maxValue = Math.max.apply(null, values.concat([1]));
+            const relativeValues = values.map(function(v) {
+              if (v <= 0) return 0;
+              var raw = (v / maxValue) * 100;
+              // Keep tiny but non-zero values visible on chart for comparison.
+              return raw < 2 ? 2 : raw;
+            });
+            const colors = labels.map((_, idx) => {
+              const palette = ['#4facfe', '#f5576c', '#43e97b', '#fa709a', '#f6d365', '#36A2EB', '#8E44AD', '#00c9a7', '#ff9671', '#ffc75f'];
+              return palette[idx % palette.length];
+            });
+
+            const ctx = document.getElementById('monthlyUserChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Relative Spending Level',
+                  data: relativeValues,
+                  backgroundColor: colors,
+                  borderColor: '#2c3e50',
+                  borderWidth: 1,
+                  minBarLength: 4
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                      max: 100,
+                      callback: function(value) {
+                        if (value === 0) return 'Low';
+                        if (value === 100) return 'High';
+                        return '';
+                      }
+                    }
+                  }]
+                },
+                tooltips: {
+                  callbacks: {
+                    label: function(tooltipItem, data) {
+                      var idx = tooltipItem.index;
+                      var rank = relativeValues[idx] + '/100';
+                      return 'Relative level: ' + rank;
+                    }
+                  }
+                },
+                legend: {
+                  display: true
+                }
+              }
+            });
+          })
+          .catch(() => {
+            const noData = document.getElementById('monthly-user-no-data');
+            const chartCanvas = document.getElementById('monthlyUserChart');
+            if (noData) noData.style.display = 'block';
+            if (chartCanvas) chartCanvas.style.display = 'none';
+          });
+        <?php } ?>
       </script>
 
 

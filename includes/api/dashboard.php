@@ -39,10 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $totalThu nhapResult = mysqli_fetch_array($totalThu nhapQuery);
     $sum_total_income = $totalThu nhapResult['totalincome'] ?? 0;
     
-    $userQuery = mysqli_query($db, "SELECT name, email FROM users WHERE id='$userid'");
+    $userQuery = mysqli_query($db, "SELECT name, email, IFNULL(avatar, '') AS avatar, IFNULL(is_admin, 0) AS is_admin, IFNULL(must_change_password, 0) AS must_change_password FROM users WHERE id='$userid'");
     $userResult = mysqli_fetch_array($userQuery);
     $userName = $userResult['name'] ?? '';
     $userEmail = $userResult['email'] ?? '';
+    $userAvatar = $userResult['avatar'] ?? '';
+    $userIsAdmin = (int)($userResult['is_admin'] ?? 0);
+    $mustChangePassword = (int)($userResult['must_change_password'] ?? 0);
     
     $chartQuery = mysqli_query($db, "SELECT Chi tieuDate, SUM(Chi tieuCost) as total_cost FROM tblexpense WHERE UserId='$userid' AND Chi tieuDate > DATE_SUB(NOW(), INTERVAL 30 day) GROUP BY Chi tieuDate ORDER BY Chi tieuDate ASC");
     $chartData = [];
@@ -66,7 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'data' => [
             'user' => [
                 'name' => $userName,
-                'email' => $userEmail
+                'email' => $userEmail,
+                'avatar' => $userAvatar,
+                'is_admin' => $userIsAdmin,
+                'must_change_password' => $mustChangePassword
             ],
             'today_expense' => (float)$sum_today_expense,
             'yesterday_expense' => (float)$sum_yesterday_expense,

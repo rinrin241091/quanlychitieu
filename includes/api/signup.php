@@ -11,6 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 include_once('../database.php');
 
+http_response_code(403);
+echo json_encode(['status' => 'error', 'message' => 'Public signup is disabled. Please contact admin for account creation.']);
+exit;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
 

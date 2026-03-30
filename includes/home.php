@@ -2,12 +2,13 @@
 session_start();
 error_reporting(0);
 include('database.php');
+include_once('i18n.php');
 
 $sessionValid = !empty($_SESSION['detsuid']);
 $hasToken = false;
 ?>
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="<?php echo htmlspecialchars(current_lang(), ENT_QUOTES, 'UTF-8'); ?>" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/style.css">
@@ -28,16 +29,14 @@ $hasToken = false;
         <span class="logo_name">Expenditure</span>
     </div>
     <ul class="nav-links">
-        <li><a href="#" class="active"><i class='bx bx-grid-alt'></i><span class="links_name">Tong quan</span></a></li>
-        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name">Chi tieu</span></a></li>
-        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name">Thu nhap</span></a></li>
-        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name">Quan ly giao dich</span></a></li>
-        <li><a href="cho vay.php"><i class='bx bx-money'></i><span class="links_name">cho vay</span></a></li>
-        <li><a href="manage-cho vay.php"><i class='bx bx-coin-stack'></i><span class="links_name">Quan ly cho vay</span></a></li>
-        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Phan tich</span></a></li>
-        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name">Bao cao</span></a></li>
-        <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name">Setting</span></a></li>
-        <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
+        <li><a href="#" class="active"><i class='bx bx-grid-alt'></i><span class="links_name"><?php echo t('dashboard'); ?></span></a></li>
+        <li><a href="add-expenses.php"><i class='bx bx-box'></i><span class="links_name"><?php echo t('expenses'); ?></span></a></li>
+        <li><a href="add-income.php"><i class='bx bx-box'></i><span class="links_name"><?php echo t('income'); ?></span></a></li>
+        <li><a href="manage-transaction.php"><i class='bx bx-list-ul'></i><span class="links_name"><?php echo t('manage_list'); ?></span></a></li>
+        <li><a href="analytics.php"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name"><?php echo t('analytics'); ?></span></a></li>
+        <li><a href="report.php"><i class="bx bx-file"></i><span class="links_name"><?php echo t('report'); ?></span></a></li>
+        <li><a href="user_profile.php"><i class='bx bx-cog'></i><span class="links_name"><?php echo t('setting'); ?></span></a></li>
+        <li class="log_out"><a href="logout.php"><i class='bx bx-log-out'></i><span class="links_name"><?php echo t('logout'); ?></span></a></li>
     </ul>
 </div>
 
@@ -45,19 +44,23 @@ $hasToken = false;
     <nav>
         <div class="sidebar-button">
             <i class='bx bx-menu sidebarBtn'></i>
-            <span class="dashboard">Tong quan</span>
+            <span class="dashboard"><?php echo t('dashboard'); ?></span>
         </div>
         <div class="search-box">
-            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="Tim kiem...">
+            <input type="text" id="search-input" class="form-control form-control-sm mx-2" placeholder="<?php echo t('search'); ?>">
             <i class='bx bx-search'></i>
+        </div>
+        <div style="margin-right:14px; font-weight:600;">
+            <a href="<?php echo htmlspecialchars(switch_lang_url('vi'), ENT_QUOTES, 'UTF-8'); ?>">VI</a> |
+            <a href="<?php echo htmlspecialchars(switch_lang_url('en'), ENT_QUOTES, 'UTF-8'); ?>">EN</a>
         </div>
         <div class="profile-details">
             <img src="images/maex.png" alt="">
             <span class="admin_name" id="user-name">Loading...</span>
             <i class='bx bx-chevron-down' id='profile-options-toggle'></i>
             <ul class="profile-options" id='profile-options'>
-                <li><a href="user_profile.php"><i class="fas fa-user-circle"></i> User Profile</a></li>
-                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="user_profile.php"><i class="fas fa-user-circle"></i> <?php echo t('user_profile'); ?></a></li>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <?php echo t('logout'); ?></a></li>
             </ul>
         </div>
     </nav>
@@ -66,56 +69,56 @@ $hasToken = false;
         <div class="overview-boxes">
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Today Chi tieu</div>
+                    <div class="box-topic"><?php echo t('today_expense'); ?></div>
                     <div class="number" id="today-expense">0</div>
-                    <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from Today</span></div>
+                    <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text"><?php echo t('up_from_today'); ?></span></div>
                 </div>
                 <i class='fas fa-circle-plus cart'></i>
             </div>
 
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Yesterday Chi tieu</div>
+                    <div class="box-topic"><?php echo t('yesterday_expense'); ?></div>
                     <div class="number" id="yesterday-expense">0</div>
-                    <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from yesterday</span></div>
+                    <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text"><?php echo t('up_from_yesterday'); ?></span></div>
                 </div>
                 <i class="fas fa-wallet cart two"></i>
             </div>
 
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Last 30 day Chi tieu</div>
+                    <div class="box-topic"><?php echo t('last_30_expense'); ?></div>
                     <div class="number" id="monthly-expense">0</div>
-                    <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from Last 30 day</span></div>
+                    <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text"><?php echo t('up_from_last_30'); ?></span></div>
                 </div>
                 <i class='fas fa-history cart three'></i>
             </div>
 
             <div class="box">
                 <div class="right-side">
-                    <div class="box-topic">Total Chi tieu</div>
+                    <div class="box-topic"><?php echo t('total_expense'); ?></div>
                     <div class="number" id="total-expense">0</div>
-                    <div class="indicator"><i class='bx bx-up-arrow-alt up'></i><span class="text">Up from Year</span></div>
+                    <div class="indicator"><i class='bx bx-up-arrow-alt up'></i><span class="text"><?php echo t('up_from_year'); ?></span></div>
                 </div>
                 <i class='fas fa-piggy-bank cart four'></i>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header"><h5 class="card-title">Chi tieu Chart</h5></div>
+            <div class="card-header"><h5 class="card-title"><?php echo t('expense_chart'); ?></h5></div>
             <div class="card-body"><canvas id="myChart"></canvas></div>
         </div>
 
         <div class="card1">
-            <div class="card-header"><h5 class="card-title">Category Table</h5></div>
+            <div class="card-header"><h5 class="card-title"><?php echo t('category_table'); ?></h5></div>
             <div class="card-body">
                 <table class="table">
                     <thead>
-                        <tr><th>Percentage</th><th>Category</th><th>Amount</th></tr>
+                        <tr><th><?php echo t('percentage'); ?></th><th><?php echo t('category'); ?></th><th><?php echo t('amount'); ?></th></tr>
                     </thead>
                     <tbody id="expense-table-body"></tbody>
                     <tfoot>
-                        <tr><th></th><th>Total</th><th>Rs. <span id="category-total">0</span></th></tr>
+                        <tr><th></th><th><?php echo t('total'); ?></th><th>Rs. <span id="category-total">0</span></th></tr>
                     </tfoot>
                 </table>
             </div>
@@ -123,7 +126,7 @@ $hasToken = false;
     </div>
 </section>
 
-<button id="add-button" title="Add Chi tieu"><i class="fas fa-plus"></i></button>
+<button id="add-button" title="<?php echo t('add_expense'); ?>"><i class="fas fa-plus"></i></button>
 
 <script>
 var chart;
@@ -139,7 +142,7 @@ function checkAuthAndRedirect() {
     return true;
 }
 
-function loadTong quanData() {
+function loadDashboardData() {
     if (!checkAuthAndRedirect()) return;
     
     $.ajax({
@@ -149,6 +152,21 @@ function loadTong quanData() {
         success: function(response) {
             if (response.status === 'success') {
                 var data = response.data;
+
+                // Keep user role in local storage so admin-only navigation can be rendered consistently.
+                if (data.user) {
+                    var currentUser = {};
+                    try {
+                        currentUser = JSON.parse(localStorage.getItem('user_data') || '{}') || {};
+                    } catch (e) {
+                        currentUser = {};
+                    }
+                    currentUser.name = data.user.name || currentUser.name || 'User';
+                    if (data.user.email) currentUser.email = data.user.email;
+                    if (typeof data.user.avatar !== 'undefined') currentUser.avatar = data.user.avatar;
+                    if (typeof data.user.is_admin !== 'undefined') currentUser.is_admin = data.user.is_admin;
+                    localStorage.setItem('user_data', JSON.stringify(currentUser));
+                }
                 
                 $('#user-name').text(data.user.name || 'User');
                 $('#today-expense').text(data.today_expense || 0);
@@ -159,7 +177,7 @@ function loadTong quanData() {
                 updateChart(data.chart.labels, data.chart.data);
                 updateCategoryTable(data.categories);
             } else {
-                console.error('Tong quan error:', response.message);
+                console.error('Dashboard error:', response.message);
                 if (response.message && response.message.includes('Unauthorized')) {
                     localStorage.removeItem('access_token');
                     window.location.href = 'index.php';
@@ -167,7 +185,7 @@ function loadTong quanData() {
             }
         },
         error: function(xhr) {
-            console.error('Tong quan request failed');
+            console.error('Dashboard request failed');
             if (xhr.status === 401) {
                 localStorage.removeItem('access_token');
                 window.location.href = 'index.php';
@@ -190,7 +208,7 @@ function updateChart(labels, data) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Chi tieu',
+                label: 'Expenses',
                 data: data,
                 backgroundColor: 'rgba(224, 82, 96, 0.5)',
                 borderColor: '#e05260',
@@ -226,9 +244,9 @@ function updateCategoryTable(categories) {
 }
 
 $(document).ready(function() {
-    loadTong quanData();
+    loadDashboardData();
     
-    setInterval(loadTong quanData, 30000);
+    setInterval(loadDashboardData, 30000);
     
     $('#search-input').on('keyup', function() {
         var value = $(this).val().toLowerCase();
@@ -399,4 +417,3 @@ addButton.addEventListener('click', () => {
 </style>
 </body>
 </html>
-
