@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $email = $input['email'] ?? $_POST['email'] ?? '';
     $password = $input['password'] ?? $_POST['password'] ?? '';
-    $secondaryPassword = $input['secondary_password'] ?? $_POST['secondary_password'] ?? '';
     
     if (empty($email) || empty($password)) {
         http_response_code(400);
@@ -42,30 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if (password_verify($password, $user->password)) {
             $secondaryHash = (string)($user->secondary_password ?? '');
-            if ($secondaryHash !== '') {
-                if ($secondaryPassword === '' || !password_verify($secondaryPassword, $secondaryHash)) {
-                    http_response_code(401);
-                    echo json_encode(['status' => 'error', 'message' => 'Invalid secondary password']);
-                    exit;
-                }
-            }
-
-            $_SESSION['detsuid'] = $user->id;
-            
-            $payload = [
+            $challengePayload = [
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'name' => $user->name,
-                'is_admin' => (int)$user->is_admin,
-                'must_change_password' => (int)$user->must_change_password
+                'purpose' => 'secondary_auth'
             ];
-            
-            $access_token = JWT::encode($payload);
+            $challengeToken = JWT::encode($challengePayload, 15 * 60);
+            $requiresSetup = ($secondaryHash === '');
             
             echo json_encode([
-                'status' => 'success',
-                'message' => 'Login successful',
-                'access_token' => $access_token,
+                'status' => $requiresSetup ? 'secondary_setup_required' : 'secondary_verify_required',
+                'message' => $requiresSetup ? 'Secondary password setup required' : 'Secondary password verification required',
+                'challenge_token' => $challengeToken,
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,

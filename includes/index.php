@@ -44,12 +44,6 @@
             <i class="bx bx-hide show-hide"></i>
           </div>
 
-                    <div class="form-outline mb-3 position-relative">
-                        <input type="password" id="secondary_password" name="secondary_password" class="form-control form-control-lg"/>
-                        <label class="form-label" for="secondary_password">Mat khau cap 2</label>
-                        <i class="bx bx-hide show-hide"></i>
-                    </div>
-
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="form-check mb-0">
               <input class="form-check-input me-2" type="checkbox" value="" id="rememberMe"/>
@@ -112,7 +106,6 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
-    var secondaryPassword = document.getElementById('secondary_password').value;
     var errorMsg = document.getElementById('error-msg');
     var successMsg = document.getElementById('success-msg');
     var loginBtn = document.getElementById('loginBtn');
@@ -132,8 +125,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         contentType: 'application/json',
         data: JSON.stringify({
             email: email,
-            password: password,
-            secondary_password: secondaryPassword
+            password: password
         }),
         dataType: 'json',
         success: function(response) {
@@ -150,6 +142,13 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
                         window.location.href = 'home.php';
                     }
                 }, 500);
+            } else if (response.status === 'secondary_setup_required' || response.status === 'secondary_verify_required') {
+                sessionStorage.setItem('secondary_auth_pending', JSON.stringify({
+                    status: response.status,
+                    challenge_token: response.challenge_token,
+                    user: response.user || null
+                }));
+                window.location.href = 'secondary-auth.php';
             } else {
                 errorMsg.textContent = response.message || <?php echo json_encode(current_lang() === 'vi' ? 'Thong tin dang nhap khong dung' : 'Invalid credentials'); ?>;
                 loginBtn.disabled = false;

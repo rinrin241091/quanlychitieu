@@ -20,7 +20,7 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
 <html lang="<?php echo htmlspecialchars(current_lang(), ENT_QUOTES, 'UTF-8'); ?>" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>Manage User Permissions</title>
+    <title><?php echo t('manage_users'); ?></title>
     <link rel="stylesheet" href="css/style.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -53,7 +53,7 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
 
 <section class="home-section">
     <nav>
-        <div class="sidebar-button"><i class='bx bx-menu sidebarBtn'></i><span class="dashboard">Manage Users</span></div>
+        <div class="sidebar-button"><i class='bx bx-menu sidebarBtn'></i><span class="dashboard"><?php echo t('manage_users'); ?></span></div>
         <div style="margin-left:auto; margin-right:12px; font-weight:600;">
             <a href="<?php echo htmlspecialchars(switch_lang_url('vi'), ENT_QUOTES, 'UTF-8'); ?>">VI</a> |
             <a href="<?php echo htmlspecialchars(switch_lang_url('en'), ENT_QUOTES, 'UTF-8'); ?>">EN</a>
@@ -75,8 +75,8 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="card-title mb-0">User Permission Management</h4>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create-user-modal"><i class="fas fa-user-plus"></i> Create User</button>
+                            <h4 class="card-title mb-0"><?php echo t('user_permission_management'); ?></h4>
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create-user-modal"><i class="fas fa-user-plus"></i> <?php echo t('create_user'); ?></button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -85,18 +85,18 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
+                                        <th><?php echo t('name'); ?></th>
                                         <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Created At</th>
-                                        <th>Password Policy</th>
-                                        <th>Secondary Password</th>
-                                        <th>Role</th>
-                                        <th>Action</th>
+                                        <th><?php echo t('phone'); ?></th>
+                                        <th><?php echo t('created_at'); ?></th>
+                                        <th><?php echo t('password_policy'); ?></th>
+                                        <th><?php echo t('secondary_password'); ?></th>
+                                        <th><?php echo t('role'); ?></th>
+                                        <th><?php echo t('action'); ?></th>
                                     </tr>
                                 </thead>
                                 <tbody id="users-tbody">
-                                    <tr><td colspan="9" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                                    <tr><td colspan="9" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> <?php echo t('loading'); ?></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -112,12 +112,12 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
         <div class="modal-content">
             <form id="create-user-form">
                 <div class="modal-header">
-                    <h5 class="modal-title">Create New User</h5>
+                    <h5 class="modal-title"><?php echo t('create_new_user'); ?></h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Name</label>
+                        <label><?php echo t('name'); ?></label>
                         <input type="text" class="form-control" id="create-name" required>
                     </div>
                     <div class="form-group">
@@ -125,25 +125,25 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
                         <input type="email" class="form-control" id="create-email" required>
                     </div>
                     <div class="form-group">
-                        <label>Phone</label>
+                        <label><?php echo t('phone'); ?></label>
                         <input type="text" class="form-control" id="create-phone" required>
                     </div>
                     <div class="form-group">
-                        <label>Temporary Password (Admin gives this to user)</label>
+                        <label><?php echo t('temporary_password_help'); ?></label>
                         <input type="text" class="form-control" id="create-password" required>
                     </div>
                     <div class="form-group">
-                        <label>Temporary Secondary Password</label>
+                        <label><?php echo t('temporary_secondary_password'); ?></label>
                         <input type="text" class="form-control" id="create-secondary-password" required>
                     </div>
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="create-is-admin">
-                        <label class="form-check-label" for="create-is-admin">Grant admin role</label>
+                        <label class="form-check-label" for="create-is-admin"><?php echo t('grant_admin_role'); ?></label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo t('cancel'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo t('create'); ?></button>
                 </div>
             </form>
         </div>
@@ -155,13 +155,13 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
         <div class="modal-content">
             <form id="edit-user-form">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit User</h5>
+                    <h5 class="modal-title"><?php echo t('edit_user'); ?></h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="edit-user-id">
                     <div class="form-group">
-                        <label>Name</label>
+                        <label><?php echo t('name'); ?></label>
                         <input type="text" class="form-control" id="edit-name" required>
                     </div>
                     <div class="form-group">
@@ -169,17 +169,17 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
                         <input type="email" class="form-control" id="edit-email" required>
                     </div>
                     <div class="form-group">
-                        <label>Phone</label>
+                        <label><?php echo t('phone'); ?></label>
                         <input type="text" class="form-control" id="edit-phone" required>
                     </div>
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="edit-is-admin">
-                        <label class="form-check-label" for="edit-is-admin">Admin role</label>
+                        <label class="form-check-label" for="edit-is-admin"><?php echo t('admin_role'); ?></label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo t('cancel'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo t('save'); ?></button>
                 </div>
             </form>
         </div>
@@ -191,24 +191,25 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
         <div class="modal-content">
             <form id="reset-password-form">
                 <div class="modal-header">
-                    <h5 class="modal-title">Reset User Password</h5>
+                    <h5 class="modal-title"><?php echo t('reset_user_password'); ?></h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="reset-user-id">
                     <div class="form-group">
-                        <label>New Temporary Password</label>
+                        <label><?php echo t('new_temporary_password'); ?></label>
                         <input type="text" class="form-control" id="reset-new-password" required>
                     </div>
                     <div class="form-group">
-                        <label>New Secondary Password (optional)</label>
+                        <label><?php echo t('new_secondary_password_optional'); ?></label>
                         <input type="text" class="form-control" id="reset-new-secondary-password">
+                        <small class="form-text text-muted"><?php echo t('secondary_password_rule'); ?></small>
                     </div>
-                    <div class="alert alert-warning mb-0">After reset, user must change password on next login.</div>
+                    <div class="alert alert-warning mb-0"><?php echo t('after_reset_must_change'); ?></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Reset Password</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo t('cancel'); ?></button>
+                    <button type="submit" class="btn btn-danger"><?php echo t('reset_user_password'); ?></button>
                 </div>
             </form>
         </div>
@@ -218,6 +219,24 @@ if (!userHasAdminPrivilege($db, $currentUserId)) {
 <script>
 var currentUserId = <?php echo (int)$currentUserId; ?>;
 var cachedUsers = [];
+var I18N = <?php echo json_encode([
+    'failed_load_users' => t('failed_load_users'),
+    'error_loading_users' => t('error_loading_users'),
+    'no_users_found' => t('no_users_found'),
+    'admin' => t('admin'),
+    'user' => t('user'),
+    'must_change_next_login' => t('must_change_next_login'),
+    'normal' => t('normal'),
+    'configured' => t('configured'),
+    'not_set' => t('not_set'),
+    'updated' => t('updated'),
+    'created' => t('created'),
+    'password_reset' => t('password_reset'),
+    'failed_update_role' => t('failed_update_role'),
+    'failed_create_user' => t('failed_create_user'),
+    'failed_update_user' => t('failed_update_user'),
+    'failed_reset_password' => t('failed_reset_password')
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
 
 function loadUsers() {
     $.ajax({
@@ -228,7 +247,7 @@ function loadUsers() {
             if (response.status === 'success') {
                 renderUsers(response.data.users || []);
             } else {
-                $('#users-tbody').html('<tr><td colspan="9" class="text-center text-danger">' + (response.message || 'Failed to load users') + '</td></tr>');
+                $('#users-tbody').html('<tr><td colspan="9" class="text-center text-danger">' + (response.message || I18N.failed_load_users) + '</td></tr>');
             }
         },
         error: function(xhr) {
@@ -236,7 +255,7 @@ function loadUsers() {
                 window.location.href = 'home.php';
                 return;
             }
-            $('#users-tbody').html('<tr><td colspan="9" class="text-center text-danger">Error loading users</td></tr>');
+            $('#users-tbody').html('<tr><td colspan="9" class="text-center text-danger">' + I18N.error_loading_users + '</td></tr>');
         }
     });
 }
@@ -245,25 +264,25 @@ function renderUsers(users) {
     cachedUsers = users;
 
     if (!users.length) {
-        $('#users-tbody').html('<tr><td colspan="9" class="text-center">No users found</td></tr>');
+        $('#users-tbody').html('<tr><td colspan="9" class="text-center">' + I18N.no_users_found + '</td></tr>');
         return;
     }
 
     var html = '';
     users.forEach(function(user, idx) {
         var roleBadge = user.is_admin === 1
-            ? '<span class="badge badge-success">Admin</span>'
-            : '<span class="badge badge-secondary">User</span>';
+            ? '<span class="badge badge-success">' + I18N.admin + '</span>'
+            : '<span class="badge badge-secondary">' + I18N.user + '</span>';
 
         var selectedAdmin = user.is_admin === 1 ? 'selected' : '';
         var selectedUser = user.is_admin === 0 ? 'selected' : '';
         var disabled = user.id === currentUserId ? 'disabled' : '';
         var passwordPolicy = user.must_change_password === 1
-            ? '<span class="badge badge-warning">Must change on next login</span>'
-            : '<span class="badge badge-info">Normal</span>';
+            ? '<span class="badge badge-warning">' + I18N.must_change_next_login + '</span>'
+            : '<span class="badge badge-info">' + I18N.normal + '</span>';
         var secondPasswordState = parseInt(user.has_secondary_password || 0, 10) === 1
-            ? '<span class="badge badge-success">Configured</span>'
-            : '<span class="badge badge-danger">Not set</span>';
+            ? '<span class="badge badge-success">' + I18N.configured + '</span>'
+            : '<span class="badge badge-danger">' + I18N.not_set + '</span>';
 
         html += '<tr>' +
             '<td>' + (idx + 1) + '</td>' +
@@ -276,8 +295,8 @@ function renderUsers(users) {
             '<td>' + roleBadge + '</td>' +
             '<td>' +
                 '<select class="form-control form-control-sm role-select" data-user-id="' + user.id + '" ' + disabled + '>' +
-                    '<option value="1" ' + selectedAdmin + '>Admin</option>' +
-                    '<option value="0" ' + selectedUser + '>User</option>' +
+                    '<option value="1" ' + selectedAdmin + '>' + I18N.admin + '</option>' +
+                    '<option value="0" ' + selectedUser + '>' + I18N.user + '</option>' +
                 '</select> ' +
                 '<button class="btn btn-sm btn-outline-primary mt-1 edit-user-btn" data-user-id="' + user.id + '"><i class="fas fa-edit"></i></button> ' +
                 '<button class="btn btn-sm btn-outline-danger mt-1 reset-pass-btn" data-user-id="' + user.id + '"><i class="fas fa-key"></i></button>' +
@@ -308,11 +327,11 @@ $(document).ready(function() {
             data: JSON.stringify({ action: 'set_role', user_id: userId, is_admin: role }),
             dataType: 'json',
             success: function(response) {
-                alert(response.message || 'Updated');
+                alert(response.message || I18N.updated);
                 loadUsers();
             },
             error: function(xhr) {
-                var msg = 'Failed to update role';
+                var msg = I18N.failed_update_role;
                 try {
                     var data = JSON.parse(xhr.responseText);
                     if (data && data.message) msg = data.message;
@@ -340,13 +359,13 @@ $(document).ready(function() {
             }),
             dataType: 'json',
             success: function(response) {
-                alert(response.message || 'Created');
+                alert(response.message || I18N.created);
                 $('#create-user-modal').modal('hide');
                 $('#create-user-form')[0].reset();
                 loadUsers();
             },
             error: function(xhr) {
-                var msg = 'Failed to create user';
+                var msg = I18N.failed_create_user;
                 try {
                     var data = JSON.parse(xhr.responseText);
                     if (data && data.message) msg = data.message;
@@ -386,12 +405,12 @@ $(document).ready(function() {
             }),
             dataType: 'json',
             success: function(response) {
-                alert(response.message || 'Updated');
+                alert(response.message || I18N.updated);
                 $('#edit-user-modal').modal('hide');
                 loadUsers();
             },
             error: function(xhr) {
-                var msg = 'Failed to update user';
+                var msg = I18N.failed_update_user;
                 try {
                     var data = JSON.parse(xhr.responseText);
                     if (data && data.message) msg = data.message;
@@ -423,12 +442,12 @@ $(document).ready(function() {
             }),
             dataType: 'json',
             success: function(response) {
-                alert(response.message || 'Password reset');
+                alert(response.message || I18N.password_reset);
                 $('#reset-password-modal').modal('hide');
                 loadUsers();
             },
             error: function(xhr) {
-                var msg = 'Failed to reset password';
+                var msg = I18N.failed_reset_password;
                 try {
                     var data = JSON.parse(xhr.responseText);
                     if (data && data.message) msg = data.message;

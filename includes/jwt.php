@@ -23,11 +23,14 @@ class JWT {
         return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 3 - (3 + strlen($data)) % 4));
     }
     
-    public static function encode($payload) {
+    public static function encode($payload, $ttlSeconds = null) {
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
         
         $payload['iat'] = time();
-        $payload['exp'] = time() + (self::$expiry_days * 24 * 60 * 60);
+        $ttl = is_numeric($ttlSeconds) && (int)$ttlSeconds > 0
+            ? (int)$ttlSeconds
+            : (self::$expiry_days * 24 * 60 * 60);
+        $payload['exp'] = time() + $ttl;
         
         $base64UrlHeader = self::base64UrlEncode($header);
         $base64UrlPayload = self::base64UrlEncode(json_encode($payload));

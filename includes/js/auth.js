@@ -152,8 +152,8 @@ var AuthManager = (function() {
                 if (response.status === 'success') {
                     setToken(response.access_token);
                     setUser(response.user);
-                    if (successCallback) successCallback(response);
                 }
+                if (successCallback) successCallback(response);
             },
             error: function(xhr) {
                 if (errorCallback) {
@@ -465,7 +465,38 @@ var AuthManager = (function() {
             { en: 'Error loading data', vi: 'Lỗi tải dữ liệu', aliases: ['Loi tai du lieu'] },
             { en: 'An error occurred while deleting.', vi: 'Đã xảy ra lỗi khi xóa.', aliases: ['Da xay ra loi khi xoa.'] },
             { en: 'An error occurred while importing the CSV file.', vi: 'Đã xảy ra lỗi khi nhập tệp CSV.', aliases: ['Da xay ra loi khi nhap tep CSV.'] },
-            { en: 'Session expired. Please login again.', vi: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', aliases: ['Phien dang nhap da het han. Vui long dang nhap lai.'] }
+            { en: 'Session expired. Please login again.', vi: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', aliases: ['Phien dang nhap da het han. Vui long dang nhap lai.'] },
+            { en: 'Create User', vi: 'Tạo người dùng', aliases: [] },
+            { en: 'Create New User', vi: 'Tạo người dùng mới', aliases: [] },
+            { en: 'Edit User', vi: 'Chỉnh sửa người dùng', aliases: [] },
+            { en: 'Reset User Password', vi: 'Đặt lại mật khẩu người dùng', aliases: [] },
+            { en: 'New Temporary Password', vi: 'Mật khẩu tạm mới', aliases: [] },
+            { en: 'New Secondary Password (optional)', vi: 'Mật khẩu cấp 2 mới (tùy chọn)', aliases: [] },
+            { en: 'Secondary password must be exactly 4 digits, using numbers 1 to 8.', vi: 'Mật khẩu cấp 2 phải đúng 4 số, dùng các số từ 1 đến 8.', aliases: [] },
+            { en: 'After reset, user must change password on next login.', vi: 'Sau khi reset, người dùng bắt buộc đổi mật khẩu ở lần đăng nhập kế tiếp.', aliases: [] },
+            { en: 'No users found', vi: 'Không tìm thấy người dùng', aliases: ['Khong tim thay nguoi dung'] },
+            { en: 'Failed to load users', vi: 'Không tải được danh sách người dùng', aliases: ['Khong tai duoc danh sach nguoi dung'] },
+            { en: 'Error loading users', vi: 'Lỗi tải danh sách người dùng', aliases: ['Loi tai danh sach nguoi dung'] },
+            { en: 'Failed to update role', vi: 'Cập nhật vai trò thất bại', aliases: ['Cap nhat vai tro that bai'] },
+            { en: 'Failed to create user', vi: 'Tạo người dùng thất bại', aliases: ['Tao nguoi dung that bai'] },
+            { en: 'Failed to update user', vi: 'Cập nhật người dùng thất bại', aliases: ['Cap nhat nguoi dung that bai'] },
+            { en: 'Failed to reset password', vi: 'Đặt lại mật khẩu thất bại', aliases: ['Dat lai mat khau that bai'] },
+            { en: 'Password reset', vi: 'Đã đặt lại mật khẩu', aliases: ['Da dat lai mat khau'] },
+            { en: 'Manage User Permissions', vi: 'Quản lý người dùng', aliases: ['Quan ly nguoi dung'] },
+            { en: 'Secondary Authentication', vi: 'Xác thực cấp 2', aliases: ['Xac thuc cap 2'] },
+            { en: 'Enter password', vi: 'Nhập mật khẩu', aliases: ['Nhap mat khau'] },
+            { en: 'Two-factor protection for your account.', vi: 'Bảo mật 2 lớp cho tài khoản của bạn.', aliases: ['Bao mat 2 lop cho tai khoan cua ban.'] },
+            { en: 'Enter secondary password', vi: 'Nhập mật khẩu cấp 2', aliases: ['Nhap mat khau cap 2'] },
+            { en: 'You must complete secondary verification before accessing the system.', vi: 'Bạn phải xác thực cấp 2 trước khi truy cập hệ thống.', aliases: ['Ban phai xac thuc cap 2 truoc khi truy cap vao he thong.'] },
+            { en: 'Press button or any key to start', vi: 'Bấm nút hoặc phím bất kỳ để bắt đầu', aliases: ['Bam nut hoac phim bat ky de bat dau'] },
+            { en: 'Back', vi: 'Lùi', aliases: ['Lui'] },
+            { en: 'Confirm', vi: 'Xác nhận', aliases: ['Xac nhan'] },
+            { en: 'Create secondary password', vi: 'Tạo mật khẩu cấp 2', aliases: ['Tao mat khau cap 2'] },
+            { en: 'First login: create a 4-digit secondary password from numbers 1 to 8.', vi: 'Lần đầu đăng nhập: hãy tạo mật khẩu cấp 2 gồm 4 số từ 1 đến 8.', aliases: ['Lan dau dang nhap: hay tao mat khau cap 2 gom 4 so tu 1 den 8.'] },
+            { en: 'Re-enter 4 digits to confirm.', vi: 'Nhập lại 4 số để xác nhận.', aliases: ['Nhap lai 4 so de xac nhan.'] },
+            { en: 'Select the 4 digits of your secondary password to continue.', vi: 'Hãy chọn 4 số của mật khẩu cấp 2 để vào hệ thống.', aliases: ['Hay chon 4 so cua mat khau cap 2 de vao he thong.'] },
+            { en: 'The two entries do not match. Please create again.', vi: 'Hai lần nhập không khớp, vui lòng tạo lại.', aliases: ['Hai lan nhap khong khop, vui long tao lai.'] },
+            { en: 'Secondary verification failed.', vi: 'Xác thực cấp 2 thất bại.', aliases: ['Xac thuc cap 2 that bai.'] }
         ];
 
         var map = {};
@@ -570,6 +601,45 @@ var AuthManager = (function() {
                 return originalConfirm(replaceInString(String(message), map));
             };
             window.__i18nAlertPatched = true;
+        }
+    }
+
+    function setupDynamicTranslation() {
+        if (window.__i18nDynamicBound) {
+            return;
+        }
+        window.__i18nDynamicBound = true;
+
+        var rerenderTimer = null;
+        function scheduleTranslate() {
+            if (rerenderTimer) {
+                clearTimeout(rerenderTimer);
+            }
+            rerenderTimer = setTimeout(function() {
+                translateUi(resolveLang());
+            }, 50);
+        }
+
+        if (typeof $ !== 'undefined' && $.fn && $.fn.jquery) {
+            $(document).ajaxComplete(function() {
+                scheduleTranslate();
+            });
+        }
+
+        if (typeof MutationObserver !== 'undefined' && document.body) {
+            var observer = new MutationObserver(function(mutations) {
+                for (var i = 0; i < mutations.length; i++) {
+                    if (mutations[i].addedNodes && mutations[i].addedNodes.length) {
+                        scheduleTranslate();
+                        return;
+                    }
+                }
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
         }
     }
 
@@ -847,6 +917,7 @@ var AuthManager = (function() {
         removeSidebarLogoutItem();
         upsertSwitcher(lang);
         translateUi(lang);
+        setupDynamicTranslation();
     }
 
     if (document.readyState === 'loading') {
